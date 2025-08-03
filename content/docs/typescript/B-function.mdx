@@ -1,0 +1,224 @@
+---
+title: Typescript Function
+description: in this chapter, we will talk about function in typescript
+---
+
+### 1.Basic Function Declaration
+
+```typescript
+// Array of fruit objects
+const fruits = [
+  { name: "apple", color: "red", quantity: 10 },
+  { name: "banana", color: "yellow", quantity: 5 },
+  { name: "orange", color: "orange", quantity: 8 },
+];
+
+// Function to check if a fruit is available in the list
+function isFruitAvailable(fruitName: string): boolean {
+  return fruits.some((fruit) => fruit.name === fruitName);
+}
+
+// Function to get fruit details
+function getFruitDetails(fruitName: string): void {
+  const fruit = fruits.find((fruit) => fruit.name === fruitName);
+  if (fruit) {
+    console.log(`✔️ ${fruit.name} is available.`);
+    console.log(`   ➤ Color: ${fruit.color}`);
+    console.log(`   ➤ Quantity: ${fruit.quantity}`);
+  } else {
+    console.log(`❌ ${fruitName} is not in stock.`);
+  }
+}
+
+// Try checking for a fruit
+const fruitToCheck = "banana";
+
+if (isFruitAvailable(fruitToCheck)) {
+  getFruitDetails(fruitToCheck);
+} else {
+  console.log(`${fruitToCheck} is not available in the fruit list.`);
+}
+```
+
+### 2.Function Type Expressions
+
+You can define the type of a function separately:
+
+```typescript
+// Define a function type for mathematical operations
+let add: (a: number, b: number) => number;
+let subtract: (a: number, b: number) => number;
+let multiply: (a: number, b: number) => number;
+let divide: (a: number, b: number) => number;
+
+// Assign actual functions
+add = function (x, y) {
+  return x + y;
+};
+
+subtract = (x, y) => x - y;
+
+multiply = (x, y) => x * y;
+
+divide = (x, y) => {
+  if (y === 0) {
+    console.log("Cannot divide by zero!");
+    return 0;
+  }
+  return x / y;
+};
+
+// Function that takes another function as parameter
+function calculate(
+  a: number,
+  b: number,
+  operation: (x: number, y: number) => number
+): number {
+  return operation(a, b);
+}
+
+// Test the functions
+console.log("Add: ", calculate(10, 5, add)); // 15
+console.log("Subtract: ", calculate(10, 5, subtract)); // 5
+console.log("Multiply: ", calculate(10, 5, multiply)); // 50
+console.log("Divide: ", calculate(10, 0, divide)); // Error msg + 0
+```
+
+### 3.Optional Parameters
+
+In TypeScript, a parameter becomes optional when you add a ? after its name.
+It means the argument is not required when calling the function.
+
+```typescript
+// 1. Simple example with one optional parameter
+function greetUser(name?: string): void {
+  if (name) {
+    console.log(`Hello, ${name}!`);
+  } else {
+    console.log("Hello, guest!");
+  }
+}
+
+greetUser("John"); // Hello, John!
+greetUser(); // Hello, guest!
+
+// 2. Optional middle parameter
+function createUser(username: string, age?: number): string {
+  if (age !== undefined) {
+    return `User: ${username}, Age: ${age}`;
+  } else {
+    return `User: ${username}, Age: not provided`;
+  }
+}
+
+console.log(createUser("Alice", 25)); // User: Alice, Age: 25
+console.log(createUser("Bob")); // User: Bob, Age: not provided
+
+// 3. Optional parameter with default value
+function sendMessage(message: string, sender: string = "System"): void {
+  console.log(`[${sender}] ${message}`);
+}
+
+sendMessage("Welcome!"); // [System] Welcome!
+sendMessage("Hi", "Admin"); // [Admin] Hi
+
+// 4. Optional parameter with complex logic
+function calculatePrice(basePrice: number, discount?: number): number {
+  if (discount !== undefined) {
+    return basePrice - (basePrice * discount) / 100;
+  }
+  return basePrice;
+}
+
+console.log(calculatePrice(100)); // 100
+console.log(calculatePrice(100, 10)); // 90
+```
+
+### 4.Default Parameters
+
+A default parameter gives a value to the parameter when no argument is passed.
+
+```typescript
+// 1. Default value for a simple greeting
+function greetUser(name: string = "Guest"): void {
+  console.log(`Hello, ${name}!`);
+}
+
+greetUser(); // Hello, Guest!
+greetUser("John"); // Hello, John!
+
+// 2. Default numeric value
+function calculateDiscount(price: number, discount: number = 10): number {
+  return price - (price * discount) / 100;
+}
+
+console.log(calculateDiscount(100)); // 90
+console.log(calculateDiscount(100, 20)); // 80
+
+// 3. Default boolean value
+function toggleSetting(settingName: string, isEnabled: boolean = true): void {
+  console.log(`${settingName} is now ${isEnabled ? "enabled" : "disabled"}.`);
+}
+
+toggleSetting("Dark Mode"); // Dark Mode is now enabled.
+toggleSetting("Notifications", false); // Notifications is now disabled.
+
+// 4. Multiple default values
+function createUser(
+  username: string = "anonymous",
+  age: number = 0,
+  role: string = "user"
+): void {
+  console.log(`Username: ${username}, Age: ${age}, Role: ${role}`);
+}
+
+createUser(); // Username: anonymous, Age: 0, Role: user
+createUser("Alice"); // Username: Alice, Age: 0, Role: user
+createUser("Bob", 30, "admin"); // Username: Bob, Age: 30, Role: admin
+```
+
+### 6.Void Return Type
+
+The void type is used when a function performs an action but doesn’t return anything.
+
+```typescript
+function logMessage(message: string): void {
+  console.log(message);
+}
+```
+
+### Rest Parameters
+
+Rest parameters allow you to collect multiple arguments into a single array.
+
+```typescript
+function sum(...numbers: number[]): number {
+  return numbers.reduce((total, n) => total + n, 0);
+}
+
+console.log(sum(1, 2, 3)); // ➜ 6
+console.log(sum(10, 20)); // ➜ 30
+```
+
+### 8.Function Overload
+
+multiple function signature for different call types
+
+```typescript
+function combine(a: string, b: string): string;
+function combine(a: number, b: number): number;
+function combine(a: any, b: any): any {
+  return a + b;
+}
+
+combine("Hello, ", "World!"); // "Hello, World!"
+combine(5, 10); // 15
+```
+
+### 9.Arrow Function
+
+Same typing applies to arrow functions:
+
+```typescript
+const multiply = (x: number, y: number): number => x * y;
+```

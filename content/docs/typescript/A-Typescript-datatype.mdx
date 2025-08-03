@@ -1,0 +1,132 @@
+---
+title: Data Types in Typescript
+description: In this chapter, you’ll learn about the different data types that TypeScript provides.
+---
+
+## 🔹 Primitives
+
+### 1. Numbers
+
+```typescript
+let age: number = 25;
+```
+
+### 2.String
+
+```typescript
+let name: string = "lay La";
+```
+
+### 3.Boolean - true/false
+
+```typescript
+let isLoggedIn: boolean = true;
+```
+
+## Union Type and Any Types
+
+Union types ဆိုသည်မှာ variable တစ်ခုမှာ type တစ်ခုထက်ပိုပြီး သတ်မှတ်နိုင်သောအမျိုးအစားဖြစ်သည်။
+
+### Primitive Type Unions
+
+```typescript
+let tax: number | string = 10;
+
+tax = "hello"; // ✅ OK
+tax = 42; // ✅ OK
+value = true; // ❌ Error (not string or number)
+```
+
+### Literal Type Unions
+
+A variable can only have specific exact values (not just any string or number).
+
+```typescript
+let status: "pending" | "success" | "error";
+
+status = "pending"; // ✅ OK
+status = "success"; // ✅ OK
+status = "done"; // ❌ Error: 'done' is not allowed
+```
+
+## 🔶 any Type
+
+any type ဆိုသည်မှာ type စစ်ဆေးမှုအားလုံးကို ပိတ်သွားသည်။ မည်သည့်တန်ဖိုးမဆို ထားနိုင်သည်။
+
+```typescript
+let anything: any;
+
+anything = "hello"; // ✅ string
+anything = 123; // ✅ number
+anything = true; // ✅ boolean
+anything = { a: 1 }; // ✅ object
+anything = [1, 2, 3]; // ✅ array
+```
+
+## 🔹 Arrays & Objects
+
+### Basic array types
+
+```typescript
+let nums: number[] = [1, 2, 3];
+let words: Array<string> = ["hello", "world"]; // Generic syntax
+let flags: boolean[] = [true, false, true];
+```
+
+### array with union types
+
+```typescript
+let mixed: (string | number)[] = ["hello", 42, "world", 100];
+```
+
+### array with objects
+
+```typescript
+let users: { name: string; age: number }[] = [
+  { name: "John", age: 30 },
+  { name: "Jane", age: 25 },
+];
+```
+
+### Basic Object Type
+
+```typescript
+let person: {
+  name: string;
+  age: number;
+  isStudent: boolean;
+} = {
+  name: "John",
+  age: 28,
+  isStudent: false,
+};
+```
+
+### Optional Properties
+
+Properties that may or may not exist, marked with ?:
+
+```typescript
+let person: {
+  name: string;
+  age?: number; // optional
+} = {
+  name: "Alice",
+};
+```
+
+### Readonly Properties
+
+Properties that cannot be changed after initialization:
+
+```typescript
+let person: {
+  readonly id: number;
+  name: string;
+} = {
+  id: 123,
+  name: "Bob",
+};
+
+person.id = 456; // ❌ Error: Cannot assign to 'id' because it is readonly.
+```
