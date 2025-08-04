@@ -1,7 +1,6 @@
 ---
 title: Data Types in Typescript
-description: In this chapter, you’ll learn about the different data types that TypeScript provides.
-order: 1
+description: ဤအခန်းတွင် TypeScript ပေးသည့် မတူကွဲပြားသော data type များကို လေ့လာသင်ယူမည်ဖြစ်သည်။
 ---
 
 ## 🔹 Primitives
@@ -64,9 +63,9 @@ anything = { a: 1 }; // ✅ object
 anything = [1, 2, 3]; // ✅ array
 ```
 
-## 🔹 Arrays & Objects
+## Arrays & Objects
 
-### Basic array types
+#### Basic array types
 
 ```typescript
 let nums: number[] = [1, 2, 3];
@@ -74,13 +73,13 @@ let words: Array<string> = ["hello", "world"]; // Generic syntax
 let flags: boolean[] = [true, false, true];
 ```
 
-### array with union types
+#### array with union types
 
 ```typescript
 let mixed: (string | number)[] = ["hello", 42, "world", 100];
 ```
 
-### array with objects
+#### array with objects
 
 ```typescript
 let users: { name: string; age: number }[] = [
@@ -89,7 +88,7 @@ let users: { name: string; age: number }[] = [
 ];
 ```
 
-### Basic Object Type
+#### Basic Object Type
 
 ```typescript
 let person: {
@@ -103,7 +102,7 @@ let person: {
 };
 ```
 
-### Optional Properties
+#### Optional Properties
 
 Properties that may or may not exist, marked with ?:
 
@@ -116,7 +115,7 @@ let person: {
 };
 ```
 
-### Readonly Properties
+#### Readonly Properties
 
 Properties that cannot be changed after initialization:
 
@@ -131,3 +130,23 @@ let person: {
 
 person.id = 456; // ❌ Error: Cannot assign to 'id' because it is readonly.
 ```
+
+### 📝 အနှစ်ချုပ် (Basic Data Types)
+
+| **အမျိုးအစား**          | **ဖော်ပြချက်**                                            | **ဥပမာ**                                                    |
+| ----------------------- | --------------------------------------------------------- | ----------------------------------------------------------- |
+| `number`                | ဂဏန်းအမျိုးအစား                                           | `let age: number = 25;`                                     |
+| `string`                | စာသားအမျိုးအစား                                           | `let name: string = "lay La";`                              |
+| `boolean`               | မှန်/မမှန် (true/false) တန်ဖိုးများအတွက်                  | `let isLoggedIn: boolean = true;`                           |
+| 🔸 **Union Type**       | တစ်ခုထက်ပိုသော type များ သတ်မှတ်နိုင်သည်                  | `let tax: number \| string = 10;`                           |
+| Literal Union           | တိတိကျကျတန်ဖိုးများသာ ခွင့်ပြုသည်                         | `let status: "pending" \| "success" \| "error";`            |
+| ⚠️ **any Type**         | မည်သည့် type ကိုမဆို ခွင့်ပြုသည်။ Type စစ်မှု ပိတ်ထားသည်  | `let anything: any = 123;`                                  |
+| 📦 **Array Types**      |                                                           |                                                             |
+| `number[]`              | ဂဏန်းများပါသော Array                                      | `let nums: number[] = [1, 2, 3];`                           |
+| `Array<string>`         | စာသား Array (Generic syntax)                              | `let words: Array<string> = ["hello", "world"];`            |
+| Union in Arrays         | Mixed type Array (string, number တို့ကို ပေါင်းစပ်ထားသည်) | `let mixed: (string \| number)[] = ["hello", 42];`          |
+| Array of Objects        | Object များပါသော Array                                    | `let users = [{ name: "John", age: 30 }]`                   |
+| 🧱 **Object Types**     |                                                           |                                                             |
+| Basic Object            | အခြေခံ Object တစ်ခု                                       | `let person = { name: "John", age: 28, isStudent: false };` |
+| Optional Property (`?`) | ရှိလည်းရရှိမရှိလည်းရသော Property                          | `age?: number`                                              |
+| Readonly Property       | တန်ဖိုးပြောင်းလဲ၍မရသော Property                           | `readonly id: number`                                       |

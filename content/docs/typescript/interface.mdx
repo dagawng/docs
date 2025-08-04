@@ -1,0 +1,149 @@
+---
+title: Interface
+description:
+  TypeScript မှာ interface ဆိုတာ object တစ်ခုရဲ့ ဖွဲ့စည်းပုံ (shape) ကို သတ်မှတ်ဖော်ပြရာမှာ အသုံးပြုပါတယ်။
+  Interface သည် object တစ်ခုမှာ မည်သည့် property များနှင့် method များ ပါဝင်ရမည်ကို သတ်မှတ်ပေးသည်။
+---
+
+### Interface Fundamentals
+
+#### interface basic
+
+```ts
+// interface Person ဆိုသည်မှာ name နဲ့ age ဆိုတဲ့ property နှစ်ခုရှိရမယ်ဆိုတဲ့ object structure ကိုဖော်ပြခြင်းဖြစ်တယ်။
+interface Person {
+  name: string;
+  age: number;
+}
+
+const student: Person = {
+  name: "Alice",
+  age: 20,
+};
+```
+
+#### Optional Properties (?)
+
+```ts
+interface Person {
+  name: string;
+  age?: number; // age? ဆိုတာ parameter တစ်ခုကို မထည့်လည်း ရတာကို ဆိုလိုတယ်။ Optional ဖြစ်တယ်။
+}
+
+const student: Person = {
+  name: "Bob",
+};
+```
+
+#### Readonly Properties
+
+```ts
+interface Book {
+  //readonly ဆိုတဲ့ keyword က property ကိုပြင်မရအောင် လုပ်ပေးတယ်။ Read-only ဖြစ်တယ်။
+  readonly id: number;
+  title: string;
+}
+
+const myBook: Book = {
+  id: 1,
+  title: "TypeScript Basics",
+};
+
+// myBook.id = 2; ❌ Error! Readonly can't be changed
+```
+
+#### Interface with Function Types
+
+```ts
+// Function တစ်ခုကို interface အဖြစ်သတ်မှတ်ဖို့ () ကိုသုံးပြီး parameter နဲ့ return type ဖော်ပြတယ်။
+interface Greeter {
+  (name: string): string;
+}
+
+const greet: Greeter = (name) => {
+  return `Hello, ${name}!`;
+};
+
+console.log(greet("Alice")); // Hello, Alice!
+```
+
+#### Interface with Methods
+
+```ts
+// Interface ထဲမှာ function (method) ကိုပါသတ်မှတ်လို့ရတယ်။  အောက်ပါအတိုင်း speak() ကို implement လုပ်ရတယ်။
+interface Animal {
+  name: string;
+  speak(): void;
+}
+
+const dog: Animal = {
+  name: "Rover",
+  speak() {
+    console.log("Woof!");
+  },
+};
+
+dog.speak(); // Woof!
+```
+
+#### Extending Interfaces (Inheritance)
+
+extends ကိုသုံးပြီး interface တစ်ခုကို နောက်တစ်ခုမှာ ဆက်လက်အသုံးပြုနိုင်တယ်။ Inheritance လုပ်တာပဲ။
+
+```ts
+interface Person {
+  name: string;
+}
+
+interface Student extends Person {
+  studentId: number;
+}
+
+const s: Student = {
+  name: "Carol",
+  studentId: 101,
+};
+```
+
+#### Interface with Index Signatures
+
+[key: string]: string; ဆိုတာက object တစ်ခုမှာ key/value pair များစွာ (dynamic keys) ပါလာနိုင်တဲ့ structure တစ်ခုပဲ။
+
+```ts
+interface Dictionary {
+  [key: string]: string;
+}
+
+const colors: Dictionary = {
+  red: "#ff0000",
+  green: "#00ff00",
+};
+```
+
+#### Interface vs Object Type
+
+interface နဲ့ type နှစ်ခုလုံး object ကိုဖော်ပြလို့ရပေမယ့် interface ကတော့ extend လုပ်ရတာ ပိုလွယ်တယ်။
+
+```ts
+// Interface way
+interface Car {
+  brand: string;
+  year: number;
+}
+
+// Type alias way
+type CarType = {
+  brand: string;
+  year: number;
+};
+```
+
+### 📝 အနှစ်ချုပ် (Interface)
+
+| အကြောင်းအရာ             | ရှင်းလင်းချက်                                                 | ဥပမာ                                                    |
+| ----------------------- | ------------------------------------------------------------- | ------------------------------------------------------- |
+| **Interface**           | Object structure ကို သတ်မှတ်ရန် အသုံးပြုသည်။                  | `interface Person { name: string; age: number; }`       |
+| **အသုံးဝင်မှု**         | Object တွင် ရှိရမည့် property များကို စနစ်တကျ ဖော်ပြနိုင်သည်။ | `const user: Person = { name: "John", age: 30 };`       |
+| **Optional Properties** | `?` ဖြင့် optional property ဖော်ပြနိုင်သည်။                   | `email?: string`                                        |
+| **Readonly Properties** | ပြောင်းလဲ၍ မရ property များကို ဖော်ပြနိုင်သည်။                | `readonly id: number`                                   |
+| **Extend**              | အခြား interface မှ ပြန်ယူရေးနိုင်သည်။                         | `interface Employee extends Person { salary: number; }` |

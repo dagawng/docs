@@ -1,6 +1,6 @@
 ---
 title: Typescript Function
-description: In this chapter, we will talk about function in typescript
+description: ဤအခန်းတွင် TypeScript function များအကြောင်းကို ဆွေးနွေးမည်ဖြစ်ပါသည်။
 ---
 
 ### 1.Basic Function Declaration
@@ -42,7 +42,7 @@ if (isFruitAvailable(fruitToCheck)) {
 
 ### 2.Function Type Expressions
 
-You can define the type of a function separately:
+function တစ်ခုရဲ့ parameter တွေ၊ return type တွေကို သီးသန့်ဖော်ပြဖို့ အသုံးပြုတဲ့ type expression တစ်ခုပဲဖြစ်ပါတယ်။
 
 ```typescript
 // Define a function type for mathematical operations
@@ -84,10 +84,10 @@ console.log("Multiply: ", calculate(10, 5, multiply)); // 50
 console.log("Divide: ", calculate(10, 0, divide)); // Error msg + 0
 ```
 
-### 3.Optional Parameters
+### 3.Optional Parameters `?`
 
-In TypeScript, a parameter becomes optional when you add a ? after its name.
-It means the argument is not required when calling the function.
+TypeScript မှာ parameter တစ်ခုကို optional ဖြစ်အောင် သတ်မှတ်ချင်လျှင် parameter name နောက်မှာ <span style={{ color: 'red' }}>?</span> သင်္ကေတကို ထည့်ရပါတယ်။
+ဒါကအဓိပ္ပါယ်မှာ function ကိုခေါ်တဲ့အချိန်မှာ အဲဒီ argument ကို မပေးလည်းရတယ် ဆိုတာကိုဖော်ပြတာပါ။
 
 ```typescript
 // 1. Simple example with one optional parameter
@@ -136,7 +136,7 @@ console.log(calculatePrice(100, 10)); // 90
 
 ### 4.Default Parameters
 
-A default parameter gives a value to the parameter when no argument is passed.
+Default parameter ဟု ဆိုသည်မှာ function ကိုခေါ်သည့်အခါ argument မပါဝင်လည်း၊ parameter အတွက် သတ်မှတ်ထားသော မူလတန်ဖိုးကို အလိုအလျှောက်သုံးပေးခြင်း ဖြစ်သည်။
 
 ```typescript
 // 1. Default value for a simple greeting
@@ -179,7 +179,7 @@ createUser("Bob", 30, "admin"); // Username: Bob, Age: 30, Role: admin
 
 ### 6.Void Return Type
 
-The void type is used when a function performs an action but doesn’t return anything.
+void type ဆိုတာ function က တစ်ခုခုလုပ်ပေမယ့် return တန်ဖိုးမရှိတဲ့အခါ သတ်မှတ်ရာမှာ သုံးပါတယ်။
 
 ```typescript
 function logMessage(message: string): void {
@@ -189,7 +189,7 @@ function logMessage(message: string): void {
 
 ### Rest Parameters
 
-Rest parameters allow you to collect multiple arguments into a single array.
+Rest parameters က argument အများကြီးကို array တစ်ခုထဲ စုပေါင်းပေးနိုင်စေပါတယ်။
 
 ```typescript
 function sum(...numbers: number[]): number {
@@ -204,7 +204,7 @@ console.log(sum(10, 20)); // ➜ 30
 
 multiple function signature for different call types
 
-```typescript
+```ts
 function combine(a: string, b: string): string;
 function combine(a: number, b: number): number;
 function combine(a: any, b: any): any {
@@ -222,3 +222,98 @@ Same typing applies to arrow functions:
 ```typescript
 const multiply = (x: number, y: number): number => x * y;
 ```
+
+### 10.Object as Parameters and excess property checking
+
+```ts
+// Function that accepts a student object with only id, name, and age
+function createStudent(student: { id: number; name: string; age: number }) {
+  console.log(`${student.name.toUpperCase()} is ${student.age} years old.`);
+  // Output will depend on the 'student' object passed
+}
+
+// ✅ Example 1: Correct object — only expected properties
+const student1 = { id: 1, name: "Alice", age: 20 };
+createStudent(student1);
+// Console Output: ALICE is 20 years old
+
+// ❌ Example 2: Direct object literal with an extra 'email' property
+createStudent({ id: 2, name: "Bob", age: 22, email: "bob@example.com" });
+// Error:
+// Argument of type '{ id: number; name: string; age: number; email: string; }' is not assignable to parameter of type '{ id: number; name: string; age: number; }'.
+// Object literal may only specify known properties, and 'email' does not exist in type ...
+
+// ✅ Example 3: Assign to a variable first — excess property allowed
+const student3 = { id: 3, name: "Carol", age: 21, email: "carol@example.com" };
+createStudent(student3);
+// Console Output: CAROL is 21 years old
+
+// ✅ Example 4: Use type assertion to ignore excess property (use with caution)
+createStudent({ id: 4, name: "Dave", age: 19, email: "dave@example.com" } as {
+  id: number;
+  name: string;
+  age: number;
+});
+// Console Output: DAVE is 19 years old
+// Console Output:
+// ALICE is 20 years old.
+```
+
+## Type Alias and Intersection Type
+
+```ts
+// ✅ Type Alias: တစ်ခုသော type ဖွဲ့စည်းပုံအတွက် အမည်တစ်ခုကို သတ်မှတ်ပေးခြင်း ဖြစ်သည်။
+
+type Person = {
+  name: string;
+  age: number;
+};
+
+// ✅ Another Type Alias for Contact Information
+type Contact = {
+  email: string;
+  phone: string;
+};
+
+// ✅ Intersection Type: combines multiple types into one
+// ဤသည်မှာ Person နှင့် Contact မှ property များအားလုံးပါဝင်ရမည့် type အသစ် တစ်ခုကို ဖန်တီးခြင်းဖြစ်သည်။
+type Employee = Person & Contact;
+
+function printEmployeeInfo(emp: Employee) {
+  console.log(`Name: ${emp.name}`);
+  console.log(`Age: ${emp.age}`);
+  console.log(`Email: ${emp.email}`);
+  console.log(`Phone: ${emp.phone}`);
+}
+
+// ✅ Example object that matches the Employee type (must include all fields from Person & Contact)
+const employee1: Employee = {
+  name: "Alice",
+  age: 28,
+  email: "alice@example.com",
+  phone: "123-456-7890",
+};
+
+printEmployeeInfo(employee1);
+
+/*
+Expected Console Output:
+Name: Alice
+Age: 28
+Email: alice@example.com
+Phone: 123-456-7890
+*/
+```
+
+### 📝 အနှစ်ချုပ် (Function + Type Alias + Intersection Type)
+
+| အကြောင်းအရာ                  | ရှင်းလင်းချက်                                                       | ဥပမာ                                                                |
+| ---------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **Function Declaration**     | Function ကို တည်ဆောက်သတ်မှတ်ခြင်း                                   | `function greet(name: string): void { console.log("Hi " + name); }` |
+| **Function Type Expression** | Function ရဲ့ type ကို သီးခြားသတ်မှတ်နိုင်သည်                        | `type GreetFunc = (name: string) => void;`                          |
+| **Optional Parameter**       | `?` ဖြင့် optional parameter သတ်မှတ်နိုင်သည်                        | `function greet(name?: string) {}`                                  |
+| **Default Parameter**        | မပေးလျှင် default value သတ်မှတ်ထားနိုင်သည်                          | `function greet(name = "Guest") {}`                                 |
+| **Rest Parameter**           | `...` အသုံးပြု၍ parameter များစွာကို array တစ်ခုအဖြစ် သိမ်းနိုင်သည် | `function sum(...nums: number[]) {}`                                |
+| **Void Return Type**         | မည်သည့်တန်ဖိုးကိုမျှ return မပြုသော function                        | `function log(msg: string): void {}`                                |
+| **Type Alias**               | Data structure တစ်ခုကို နာမည်တစ်ခုဖြင့် သတ်မှတ်ခြင်း                | `type User = { name: string; age: number };`                        |
+| **Intersection Type (`&`)**  | Type နှစ်ခု (သို့ များ) ကို ပေါင်းပြီး အသစ်တစ်ခုဖန်တီးခြင်း         | `type Contact = Person & Address;`                                  |

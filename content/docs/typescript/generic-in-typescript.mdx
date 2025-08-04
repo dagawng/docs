@@ -1,0 +1,115 @@
+---
+title: 🧠 TypeScript Generics အကြောင်း
+description:
+  Generics ဆိုတာက function တစ်ခု၊ interface တစ်ခု၊ type တစ်ခုမှာ value type မသိရသေးတဲ့အခါ type variable
+  တစ်ခုအနေနဲ့ T ကဲ့သို့တဲ့ symbol တွေသုံးပြီး နောက်မှသိတဲ့အချိန်မှာ type ကိုပေးနိုင်အောင်ဖန်တီးထားတာပါ။
+---
+
+### 📦 အခြေခံ Generic Function
+
+#### ❌ Generics မသုံးဘဲရေးခြင်း
+
+```ts
+function echo(value: any): any {
+  return value;
+}
+```
+
+🔻 ပြဿနာ: any က type ဘယ်လိုမျိုးမှမစစ်လို့ type error တွေက runtime မှာပဲ သိနိုင်တယ်။
+
+```ts
+const result = echo("hello");
+result.toUpperCase(); // ✅ မှန်
+
+const numResult = echo(123);
+numResult.toUpperCase(); // ❌ runtime မှာ error တက်နိုင်တယ်
+```
+
+#### ✅ Generics အသုံးပြုခြင်း
+
+```ts
+function echoGeneric<T>(value: T): T {
+  return value;
+}
+```
+
+🔸 T ဆိုတာက type variable ပါ။ သုံးတဲ့အချိန်မှာ အတိအကျသိစေနိုင်တယ်။
+
+```ts
+const result = echoGeneric("hello"); // T = string
+result.toUpperCase(); // ✅ မှန်
+```
+
+#### 👯 Multiple Generics (type နှစ်ခုသုံးခြင်း)
+
+```ts
+function merge<T, U>(a: T, b: U): [T, U] {
+  return [a, b];
+}
+
+const merged = merge<number, string>(1, "one"); // [1, "one"]
+```
+
+#### 🛡️ Generic Constraints (အကန့်အသတ်ပြုခြင်း)
+
+extends ကို သုံးပြီး ဘယ်လိုမျိုး data type တွေပဲ သုံးလို့ရမယ်ဆိုတာသတ်မှတ်လို့ရတယ်။
+
+```ts
+function printLength<T extends { length: number }>(item: T): void {
+  console.log(item.length);
+}
+
+printLength("hello"); // ✅ OK
+printLength([1, 2, 3]); // ✅ OK
+printLength(123); // ❌ number တွေမှာ length မရှိ
+```
+
+#### 🧱 Generic Interface
+
+```ts
+interface Box<T> {
+  value: T;
+}
+
+const stringBox: Box<string> = { value: "Hello" };
+const numberBox: Box<number> = { value: 123 };
+```
+
+#### 🛠️ Generic Type Alias
+
+```ts
+type Pair<T> = [T, T];
+
+const stringPair: Pair<string> = ["a", "b"];
+const numberPair: Pair<number> = [1, 2];
+```
+
+#### 🌐 အကြမ်းစား အသုံးချမှု - Promise
+
+```ts
+async function fetchData<T>(): Promise<T> {
+  const res = await fetch("/api/data");
+  return await res.json();
+}
+
+interface User {
+  id: number;
+  name: string;
+}
+
+async function loadUser() {
+  const user = await fetchData<User>();
+  console.log(user.id);
+}
+```
+
+### 📝 အနှစ်ချုပ်ဇယား (Summary Table)
+
+| Feature           | Example                         | အကြောင်းအရာ (Use Case)                               |
+| ----------------- | ------------------------------- | ---------------------------------------------------- |
+| အခြေခံ Function   | `function fn<T>(x: T): T`       | input နဲ့ output ကို တူအောင်ထားခြင်း                 |
+| Multiple Generics | `function fn<T, U>(a: T, b: U)` | type နှစ်ခုထက်ပိုသုံးချင်တဲ့အခါ                      |
+| Constraint        | `T extends SomeType`            | အသုံးပြုလိုတဲ့ type ကို တိတိကျကျသတ်မှတ်ချင်တဲ့အခါ    |
+| Interface         | `interface Box<T> { value: T }` | reusable object type တစ်ခုဖန်တီးချင်တဲ့အခါ           |
+| Type Alias        | `type Pair<T> = [T, T]`         | ပြန်သုံးလို့ရတဲ့ shorthand type အဖြစ်အသုံးပြုခြင်း   |
+| Promise           | `Promise<T>`                    | async result (fetch result) တွေကို type သတ်မှတ်ခြင်း |

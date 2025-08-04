@@ -1,4 +1,11 @@
 {
   "title": "Typescript",
-  "pages": ["typescript-data-type", "function"]
+  "pages": [
+    "typescript-data-type",
+    "function",
+    "interface",
+    "tuples-and-enum",
+    "type-assertion-type-unknow-type-never",
+    "generic-in-typescript"
+  ]
 }

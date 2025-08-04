@@ -1,0 +1,159 @@
+---
+title: Tuples And Enum
+description: ဤအခန်းတွင် Tuple နှင့် Enum ကို ရိုးရှင်းသောနည်းဖြင့် လေ့လာသင်ယူမည်။
+---
+
+### Tuples
+
+Tuple ဆိုတာ အရေအတွက် သိပြီးသားအတိုင်း data types များကို အစဉ်လိုက်ထားတဲ့ array တစ်ခုပါ။
+
+#### Basic Tuple
+
+ဒီမှာ string နဲ့ number ဆိုတဲ့ အမျိုးအစားနှစ်ခုပါ။
+
+```ts
+let person: [string, number] = ["Alice", 25];
+
+//Accessing Tuple Elements
+console.log(person[0]); // "Alice"
+console.log(person[1]); // 25
+```
+
+#### Tuple with More Types
+
+```ts
+let employees: [number, string, boolean] = [101, "mike", true];
+```
+
+#### Using Tuple with Function Return
+
+Function တစ်ခုက Tuple တန်ဖိုးပြန်ပေးလို့ရတယ်။ Destructuring လုပ်လည်းရတယ်။
+
+```ts
+function getUser(): [string, number] {
+  return ["johnson", 30];
+}
+
+const [name, age] = getUser();
+console.log(name); // "johnson"
+console.log(age); // 30
+```
+
+#### Tuple with Rest Elements
+
+```ts
+let colors: [string, ...string[]] = ["red", "green", "blue"];
+
+console.log(colors[0]); // "red"
+console.log(colors[1]); // "green"
+console.log(colors[2]); // "blue"
+console.log(colors); // ["red", "green", "blue"]
+```
+
+### Enums
+
+Enum ဆိုတာ ခေါ်သုံးဖို့အတွက် အမည်ရှိတဲ့ constant တန်ဖိုးများကိုစုစည်းထားခြင်းပါ။
+
+#### Numeric Enum
+
+Numeric Enum မှာ default value က 0 စတင်တယ်။
+
+```ts
+enum Direction {
+  Up,
+  Down,
+  Left,
+  Right,
+}
+
+let move: Direction = Direction.Up;
+console.log(move); // 0
+```
+
+#### Numeric Enum with Custom Values
+
+Enum တန်ဖိုးကို ကိုယ့်တော်သင့်သလို assign လုပ်လို့ရတယ်။
+
+```ts
+enum Status {
+  Pending = 1,
+  Approved = 2,
+  Rejected = 3,
+}
+
+console.log(Status.Pending); // 1
+```
+
+#### String Enum
+
+String Enum ကတော့ တန်ဖိုးတွေကို စာသားအဖြစ် assign လုပ်တယ်။
+
+```ts
+enum LogLevel {
+  Info = "INFO",
+  Warning = "WARNING",
+  Error = "ERROR",
+}
+
+let level: LogLevel = LogLevel.Warning;
+console.log(level); // "WARNING"
+```
+
+#### Reverse Mapping (Only in Numeric Enum)
+
+Numeric Enum တွေမှာ value ကနေ name ပြန်ရှာလို့ရတယ်။ (reverse mapping)
+
+```ts
+enum Role {
+  User = 1,
+  Admin = 2,
+}
+
+console.log(Role[1]); // "User"
+```
+
+#### Const Enum (for performance)
+
+const enum ကိုသုံးတာက performance တိုးစေတယ်။ Compile ထဲမှာ inline လုပ်မယ်။
+
+```ts
+const enum Size {
+  Small = "S",
+  Medium = "M",
+  Large = "L",
+}
+
+let shirtSize: Size = Size.Medium;
+console.log(shirtSize); // Output: "M"
+```
+
+#### Use Enums in Functions
+
+Enum တွေကို function logic ထဲမှာ condition များအဖြစ် သုံးလို့ရတယ်။
+
+```ts
+enum Language {
+  English,
+  Burmese,
+  Japanese,
+}
+
+function greet(lang: Language) {
+  if (lang === Language.Burmese) {
+    console.log("မင်္ဂလာပါ");
+  } else {
+    console.log("Hello");
+  }
+}
+
+greet(Language.Burmese); // မင်္ဂလာပါ
+```
+
+### 📝 အနှစ်ချုပ် (Tuples vs Enums)
+
+| အကြောင်းအရာ          | ရှင်းလင်းချက်                                             | ဥပမာ                                 |
+| -------------------- | --------------------------------------------------------- | ------------------------------------ |
+| **Tuple**            | တိကျသည့် အကြောင်းအရာများကို အစီအစဉ်အတိုင်းသိမ်းဆည်းခြင်း။ | `[string, number]` = `["John", 25]`  |
+| **Enum**             | နာမည်ပေးထားသော constant value အစုအဝေး။                    | `enum Size { Small, Medium, Large }` |
+| **Tuple အထူးသဖြင့်** | တစ်ခုချင်းစီမှာ type သတ်မှတ်ထားနိုင်သည်။                  | `let user: [string, number]`         |
+| **Enum အထူးသဖြင့်**  | ရိုးရှင်းပြီး readable ဖြစ်စေသည်။                         | `shirtSize = Size.Medium`            |
