@@ -6,6 +6,7 @@
     "interface",
     "tuples-and-enum",
     "type-assertion-type-unknow-type-never",
-    "generic-in-typescript"
+    "generic-in-typescript",
+    "Classes"
   ]
 }

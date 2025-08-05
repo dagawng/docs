@@ -1,0 +1,205 @@
+---
+title: Classes
+description: Class ဆိုတာကတော့ object တွေဖန်တီးဖို့အတွက် template (ပုံစံ) တစ်ခုဖြစ်ပါတယ်။
+---
+
+```ts
+class Person {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet(): void {
+    console.log(`Hello, my name is ${this.name}`);
+  }
+}
+
+const john = new Person("John", 30);
+john.greet(); // Hello, my name is John
+```
+
+class က object တွေဖန်တီးဖို့အတွက်အသုံးပြုတဲ့ပုံစံတစ်ခုဖြစ်တယ်။
+constructor() က object တစ်ခုဖန်တီးချိန်မှာ ခေါ်သုံးတာဖြစ်တယ်။
+
+### 🧱 Class ထဲမှာပါဝင်တဲ့ အစိတ်အပိုင်းများ
+
+#### ✅ Properties (ဂုဏ်သတ္တိများ)
+
+Class ထဲမှာ variable (property) တွေသတ်မှတ်ပြီး data ကိုသိမ်းထားနိုင်ပါတယ်။
+
+```ts
+class Car {
+  brand: string = "Toyota";
+  year: number = 2020;
+}
+```
+
+#### ✅ Methods (နည်းလမ်းများ)
+
+Method တွေကတော့ class ထဲမှာလုပ်ဆောင်မှု (function) တွေကိုဖော်ပြတာဖြစ်ပါတယ်။
+
+```ts
+class Car {
+  drive(): void {
+    console.log("Driving...");
+  }
+}
+```
+
+#### ✅ Constructor (ဖန်တီးရာနေရာ)
+
+constructor ကတော့ object ဖန်တီးတဲ့အချိန်မှာအလုပ်လုပ်တဲ့ function ဖြစ်တယ်။
+
+```ts
+class Car {
+  brand: string;
+
+  constructor(brand: string) {
+    this.brand = brand;
+  }
+}
+```
+
+#### 🔐 Access Modifiers (ဝင်ခွင့်ထိန်းချုပ်မှု)
+
+- public မည်သည့်နေရာမှာမဆို အသုံးပြုနိုင်သည် (default)
+- private class ထဲမှာပဲ အသုံးပြုလို့ရသည်
+- 🔐 protected – မိမိ class နှင့် ဆင်းသက်သွားတဲ့ class တွင်သာ အသုံးပြုနိုင်သည်
+
+```ts
+class Animal {
+  public name: string;
+  private age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  getAge(): number {
+    return this.age;
+  }
+}
+```
+
+#### 🧬 Inheritance (အမွေဆက်ခံခြင်း)
+
+- extends သုံးတာဖြင့် class တစ်ခုကနေ method တွေကိုအခြား class သို့အမွေဆက်ခံနိုင်ပါတယ်။
+
+```ts
+class Animal {
+  move() {
+    console.log("Moving...");
+  }
+}
+
+class Dog extends Animal {
+  bark() {
+    console.log("Woof!");
+  }
+}
+
+const dog = new Dog();
+dog.move(); // Moving...
+dog.bark(); // Woof!
+```
+
+#### 💡 Super Keyword (မိဘ class ကို ခေါ်သုံးခြင်း)
+
+- super() သည် မိဘ class ရဲ့ constructor ကိုခေါ်ရန် အသုံးပြုသည်။
+
+```ts
+class Animal {
+  constructor(public name: string) {}
+}
+
+class Dog extends Animal {
+  constructor(name: string, public breed: string) {
+    super(name);
+  }
+}
+```
+
+#### 🧩 Getters & Setters (ရယူခြင်း/ပြင်ဆင်ခြင်း)
+
+- private property ကိုပြင်ဖို့ set method, ဖတ်ဖို့ get method ကိုသုံးတယ်။
+
+```ts
+class User {
+  private _age: number;
+
+  constructor(age: number) {
+    this._age = age;
+  }
+
+  get age(): number {
+    return this._age;
+  }
+
+  set age(value: number) {
+    if (value >= 0) {
+      this._age = value;
+    }
+  }
+}
+```
+
+#### 🎯 Static Members
+
+- static ဆိုတာ object မဖန်တီးဘဲ class ကနေတိုက်ရိုက်ခေါ်သုံးနိုင်တဲ့ property/method ဖြစ်တယ်။
+
+```ts
+class MathHelper {
+  static PI: number = 3.14;
+
+  static circleArea(diameter: number): number {
+    return this.PI * diameter;
+  }
+}
+
+console.log(MathHelper.circleArea(10)); // 31.4
+```
+
+#### 🔗 Abstract Classes (အခြေခံပုံစံ class)
+
+- တိုက်ရိုက် object မဖန်တီးနိုင်တဲ့ မူလ class
+
+```ts
+abstract class Shape {
+  abstract area(): number; // No body (must be implemented by subclass)
+}
+
+class Circle extends Shape {
+  constructor(public radius: number) {
+    super();
+  }
+
+  area(): number {
+    return Math.PI * this.radius * this.radius;
+  }
+}
+
+const circle = new Circle(5);
+console.log(circle.area()); // 78.5398...
+```
+
+## 📝 အနှစ်ချုပ်ဇယား (Summary Table)
+
+| အပိုင်းအမည်         | Syntax Example                   | မြန်မာဖော်ပြချက်                                          |
+| ------------------- | -------------------------------- | --------------------------------------------------------- |
+| **Class**           | `class MyClass {}`               | Object ဖန်တီးဖို့အတွက် အခြေခံပုံစံ (template)             |
+| **Constructor**     | `constructor() {}`               | Object ဖန်တီးချိန်မှာအလုပ်လုပ်တဲ့ Function                |
+| **Property**        | `name: string`                   | Data ကိုသိမ်းဖို့ အသုံးပြုတဲ့ field                       |
+| **Method**          | `greet(): void {}`               | Class ထဲမှာရေးတဲ့ function (လုပ်ဆောင်ချက်)                |
+| **Access Modifier** | `public`, `private`, `protected` | Member တွေရဲ့ အသုံးပြုခွင့် ထိန်းချုပ်မှု                 |
+| **Inheritance**     | `class B extends A`              | Class B သည် Class A ထံမှ အမွေဆက်ခံသည်                     |
+| **super()**         | `super()` in constructor         | မိဘ Class ရဲ့ constructor ကို ခေါ်သုံးခြင်း               |
+| **Getter/Setter**   | `get name()`, `set name()`       | Private data ကို ဖတ်ခြင်း / ပြင်ခြင်း                     |
+| **Static Member**   | `static PI = 3.14`               | Object မလိုပဲ class မှတစ်ဆင့် တန်းအသုံးပြုနိုင်သော member |
+| **Abstract Class**  | `abstract class Shape {}`        | Object မဖန်တီးနိုင်သော base class                         |
+
+> 💡 အထက်ပါဇယားသည် TypeScript Class တွင် အသုံးများသော အကြောင်းအရာများကို တစ်ခန်းတစ်ခန်းဖော်ပြထားခြင်းဖြစ်ပါသည်။
