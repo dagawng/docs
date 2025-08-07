@@ -3,6 +3,7 @@
   "pages": [
     "typescript-data-type",
     "function",
+    "type-Alias-and-Intersection-Type",
     "interface",
     "tuples-and-enum",
     "type-assertion-type-unknow-type-never",
