@@ -1,0 +1,69 @@
+---
+title: Next.js Features
+description: Pages
+---
+
+### ✨ Homepage တည်ဆောက်ခြင်း
+
+```tsx
+// app/page.tsx
+export default function HomePage() {
+  return <h1 className="text-7xl">Home Page</h1>;
+}
+```
+
+- 👉 Tailwind CSS Class များသုံးထားပါတယ်။
+- text-7xl ဆိုတာက Heading အကြီးကြီးတစ်ခု ဖြစ်အောင်လုပ်ပေးပါတယ်။
+
+### ➕ အခြား Page များဖန်တီးခြင်း
+
+1. Folder အသစ်ဖန်တီးပါ: about/
+2. File အသစ်ဖန်တီးပါ: page.tsx
+
+```tsx
+// app/about/page.tsx
+export default function AboutPage() {
+  return <h1 className="text-5xl">About Page</h1>;
+}
+```
+
+အဲဒီလိုနဲ့ /about ကို browser မှာသွားကြည့်မယ်ဆိုရင် About Page ပြပါလိမ့်မယ်။
+
+ထပ်ပြီး info/ folder ထဲမှာလည်း page.tsx ထည့်ပြီး Info Page တည်ဆောက်လို့ရပါတယ်။
+
+### 🔗 Page များအကြား Navigation ပြုလုပ်ခြင်း (Link)
+
+- Next.js မှာ Page များအကြား ပြောင်းဖို့ Link Component ကိုသုံးပါတယ်။
+
+```tsx
+// app/page.tsx
+import Link from "next/link";
+
+export default function HomePage() {
+  return (
+    <>
+      <h1 className="text-7xl">Home Page</h1>
+      <Link href="/about" className="text-xl text-blue-500 inline-block mt-8">
+        About Page
+      </Link>
+    </>
+  );
+}
+```
+
+### 🔧 Scripts များ (package.json မှာ)
+
+| Command         | ရည်ရွယ်ချက်                              |
+| --------------- | ---------------------------------------- |
+| `npm run dev`   | `localhost:3000` မှာ Dev Server ဖွင့်သည် |
+| `npm run build` | Production Build ဖန်တီးသည်               |
+| `npm start`     | Production Build ကို locally run ပြသည်   |
+
+### 🔌 Extension အကြောင်း (VS Code)
+
+React Component Snippet များအတွက်:
+Extension Name: ES7+ React/Redux/React-Native Snippets
+
+- rfce လို့ရိုက်လိုက်တာနဲ့ Functional Component Template ကို auto-generate လုပ်ပေးပါတယ်။
+
+---

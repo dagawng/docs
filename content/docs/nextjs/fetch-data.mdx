@@ -1,0 +1,105 @@
+---
+title: Server Components နဲ့ Data Fetching
+description: 💡 Next.js ဆိုတာဘာလဲ?
+---
+
+Server Components ကို သုံးတဲ့အခါမှာအကြိုက်ဆုံး feature ကတော့ data fetching လုပ်တာလွယ်တာပါပဲ။ loading state ၊ error state စတဲ့ logic တွေကို useEffect နဲ့ ချိန်ညှိရတာမကြိုက်ဘူးဆိုရင် ဒီ setup ကို သဘောကျပါလိမ့်မယ်။
+
+URL ရွေးချယ်ရာမှာ ကိုယ်တိုင်သိတဲ့ reliable server ကိုသုံးသင့်ပါတယ်။
+
+---
+
+### ဖိုင်ဖွဲ့စည်းခြင်း
+
+1. app/tours/page.tsx ဆိုတဲ့ဖိုင်အသစ်ဖန်တီးပါ။
+2. Component တစ်ခုတည်ဆောက်ပြီး ToursPage လို့နာမည်ပေးပါ။
+3. TypeScript သုံးမယ်ဆိုတော့ tour တစ်ခုမှာ ပါဝင်မယ့် property တွေ (id, name, info, image, price) အတွက် Type တစ်ခု ပြုလုပ်ပေးရပါမယ်။
+
+```tsx
+const ToursPage = async () => {
+  const response = await fetch("API_URL_HERE");
+  const data: Tour[] = await response.json();
+
+  console.log(data); // ဒီ log က browser မှာမဟုတ်ဘဲ server terminal မှာပဲ တွေ့ရပါမယ်။
+
+  return (
+    <section>
+      <h1 className="text-3xl mb-4">Tours</h1>
+      {data.map((tour) => (
+        <h2 key={tour.id}>{tour.name}</h2>
+      ))}
+    </section>
+  );
+};
+```
+
+### Data Fetching Logic ကို Component ပြင်ပသို့ ခွဲထုတ်ခြင်း
+
+Fetching logic ကို component ထဲမှာ မထားဘဲ သီးသန့် function တစ်ခုအဖြစ်ရေးလို့ရပါတယ်။
+
+```tsx
+const fetchTours = async (): Promise<Tour[]> => {
+  // Loading အတွက် simulation
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  const response = await fetch("API_URL_HERE");
+  const data = await response.json();
+  return data;
+};
+
+// ဒါနဲ့ ToursPage ထဲမှာတော့ simply fetchTours function ကို call လုပ်ပါ။
+
+const data = await fetchTours();
+```
+
+---
+
+### Custom Loading Component
+
+Data loading ချိန်မှာ user ကို feedback ပေးဖို့ loading.tsx ဖိုင်ထဲမှာ client component တစ်ခုရေးပါ။
+
+```tsx
+"use client";
+
+export default function Loading() {
+  return <span className="text-xl capitalize">loading tours...</span>;
+}
+```
+
+အရေးကြီးတာက loading.tsx လို့အမည်ပေးရပြီး use client directive ကိုထည့်ပေးရပါမယ်။ ဒီ loading component ကို page loading ချိန်မှာ Next.js က auto render လုပ်ပေးမှာဖြစ်ပါတယ်။
+
+---
+
+### Custom Error Component
+
+API မှာ error ဖြစ်လာရင် ပြသဖို့ error.tsx ဖိုင်ထဲမှာလည်း client component တစ်ခုရေးပါ။
+
+```tsx
+"use client";
+
+type ErrorProps = {
+  error: Error;
+};
+
+export default function Error({ error }: ErrorProps) {
+  return (
+    <span className="text-red-500">There was an error: {error.message}</span>
+  );
+}
+```
+
+ဒါကို အသုံးပြုဖို့အတွက် ပြီးနောက် API URL ကိုတမင်ပြုတ်ရေးပြီး error ဖြစ်အောင် simulation လုပ်လို့ရပါတယ်။
+
+---
+
+### SEO နှင့် Performance အတွက် အကျိုးကျေးဇူးများ
+
+- Server မှာ fetch လုပ်တာဖြစ်လို့ အားလုံးကို HTML ပုံစံနဲ့ ပြန်ပေးနိုင်ပြီး SEO အတွက်အထောက်အကူဖြစ်တယ်။
+- Client ကို JavaScript ချက်ချင်းမပေးဘဲ server မှာပဲ rendering လုပ်တာဖြစ်လို့ Speed မြန်တယ်။
+
+### နိဂုံးချုပ်
+
+- Server Component မှာ async function တွေ တိုက်ရိုက်သုံးလို့ရတယ်။
+- Custom loading/error component များရေးဖို့ လိုအပ်တယ်။
+- TypeScript အသုံးပြုမယ်ဆိုရင် type ကို သေချာသတ်မှတ်ပေးဖို့ လိုတယ်။
+- Data fetching logic ကို component ထဲမထည့်ပဲ ပြင်ပ function တွေဖြစ်အောင် ခွဲထုတ်ခြင်းက code ကို maintain လုပ်ရတာ ပိုလွယ်တယ်။

@@ -1,0 +1,50 @@
+---
+title: More Routing Options
+description: Routing
+---
+
+### Private Folders (Private Routes)
+
+App folder ထဲမှာ ဖိုင်တစ်ခုခု ဖန်တီးလိုက်တာနဲ့ URL segment တစ်ခုဖြစ်သွားတတ်ပါတယ်။
+ဒါပေမဲ့ တစ်ခါတစ်လေ ဖိုလ်ဒါမှာ logic တွေထည့်ချင်ပေမဲ့ route မဖြစ်ချင်တာမျိုးရှိတတ်ပါတယ်။
+အဲ့ဒီအခါမှာ ဖိုလ်ဒါနာမည်ကို `underscore (_)` နဲ့ စလို့ရပါတယ်။
+
+- ဥပမာ - `_css` ဆိုတဲ့ ဖိုလ်ဒါကို ဖန်တီးလိုက်မယ် ဆိုပါစို့။
+  Browser မှာ `/css` ဆိုတဲ့ route ကို access လုပ်တာနဲ့ 404 error ပြပါလိမ့်မယ်။
+
+### Route Groups
+
+Dashboard တို့ Auth တို့လိုမျိုး Route တွေကို Group ချင်တယ်ဆိုရင် () သုံးလို့ရပါတယ်။
+
+Example:`(dashboard)/auth/page.tsx;`
+
+ဒီမှာတော့ auth ကို URL မှာ ရိုက်ရင် `/auth` ဖြစ်မှာပါ။ `(dashboard)`ဆိုတဲ့ folder က Grouping အတွက်သာ ဖြစ်တာမို့ URL မှာပါမလာပါဘူး။
+
+---
+
+### Catch-all Routes
+
+`Catch-all Route` ဆိုတာ Route parameter တွေ များများနဲ့ match လုပ်ဖို့အတွက် သုံးတာဖြစ်ပါတယ်။ Folder နာမည်မှာ `[...]` သုံးရပါမယ်။
+
+**ဥပမာ:** `auth/[...signin]/page.tsx`
+
+- `/auth/signin` ကနေစပြီး `/auth/signin/123/hello` လိုမျိုး အတိုင်းအတာမရှိတဲ့ path တွေအတွက် အသုံးဝင်ပါတယ်။
+- `params.signin` ဟာ `string[]` ဖြစ်မှာပါ။ ဥပမာ `['signin', '123', 'hello']`
+
+---
+
+### Optional Catch-all Routes
+
+တစ်ခါတစ်လေမှာ Catch-all Route ဖြစ်စေချင်တယ်၊ မဖြစ်လည်းရတယ်ဆိုတဲ့အချိန်မှာ `[[...signin]] `လိုပဲ နှစ်ချက် wrap လုပ်ပါတယ်။
+
+- အကယ်၍ `/auth မှာ page.tsx` မရှိပေမဲ့ `[[...signin]] `ရှိတယ်ဆိုရင် 404 မဖြစ်ပါဘူး။ Empty params ဖြင့် page render ဖြစ်မှာပါ။
+
+### Params Access
+
+Catch-all params တွေဟာ array ဖြစ်တာမို့ `params['signin'][1]` ဆိုတဲ့ပုံစံနဲ့ access လုပ်ရပါတယ်။
+
+- `params['signin'][0] → ‘signin’`
+- `params['signin'][1] → ‘123’`
+- `params['signin'][2] → ‘hello’`
+
+ဒီလိုနဲ့ Catch-all Routes နဲ့ Optional Catch-all Routes ကို Next.js မှာ သုံးနိုင်ပါတယ်။ Popular library တွေကလည်း ဒီနည်းကို အသုံးများကြပါတယ်။

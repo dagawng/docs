@@ -1,0 +1,81 @@
+---
+title: Server Components Vs Client Components
+description: Pages
+---
+
+### 📌 Next.js မှာ Components ၂ မျိုးရှိတယ်
+
+1. **Server Components** – Default ဖြစ်တယ်၊ Server ပေါ်မှာ Render လုပ်တယ်။
+2. **Client Components** – User interaction, browser API (ဥပမာ `localStorage`) တွေလိုအပ်ရင်သုံးတယ်။
+
+### 🧠 ဘာကြောင့် Server Components အဓိကသုံးတယ်?
+
+- Next.js မှာ default အနေနဲ့ Component တော်တော်များများဟာ Server Component ဖြစ်နေပြီးသားပါ။
+- ဥပမာ `page.tsx` file တစ်ခုရဲ့ အစကတည်းက Server Side Render ဖြစ်နေပါပြီ။
+- Server Component တွေက performance အမြန်၊ security မြင့်၊ JS bundle ပိုသေးတာမျိုး အကျိုးရှိပါတယ်။
+
+### 🧪 Client Component ကို ဘယ်အချိန်မှာသုံးမလဲ?
+
+- User interaction ရှိတဲ့အခါ (ဥပမာ `onClick`, `useState`)
+- Browser API (ဥပမာ `localStorage`, `window`) တွေသုံးတဲ့အခါ
+
+အဲဒီလို Component တွေကို အသုံးပြုချင်တဲ့အခါမှာ `"use client"` directive ကို file ထဲမှာ အပေါ်ဆုံးတွင်ထည့်ရပါမယ်။
+
+---
+
+### 🧮 Counter Component Example (Client Component)
+
+#### 🛠 Counter Component တည်ဆောက်ခြင်း
+
+**1. Counter Page Setup (Server Component)**
+
+```tsx
+// app/counter/page.tsx
+import Counter from "./Counter";
+
+export default function CounterPage() {
+  return (
+    <section>
+      <h1 className="text-6xl mb-16">Page Content</h1>
+      <Counter />
+    </section>
+  );
+}
+```
+
+**2. Counter Component Setup (Client Component)**
+
+```tsx
+// app/counter/Counter.tsx
+"use client";
+
+import { useState } from "react";
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div className="flex flex-col items-center w-[200px]">
+      <p className="text-5xl font-bold">{count}</p>
+      <button
+        className="bg-blue-500 text-white px-4 py-2 mt-4"
+        onClick={() => setCount(count + 1)}
+      >
+        Increment
+      </button>
+    </div>
+  );
+}
+```
+
+### 🔁 Summary
+
+- Counter Component ဟာ **Client Component** ဖြစ်ပြီး `"use client"` သုံးထားတယ်။
+- Counter Page (Server Component) ထဲမှာ Nest လုပ်ထားလို့ Server + Client Mixed Architecture ဖြစ်နေတယ်။
+
+### ✅ Advantage
+
+- Whole page ကို client component မဖြစ်စေရဘဲ နေရာချင်းသတ်မှတ်ပြီးသာ client interactivity ထည့်လို့ရတယ်။
+- Performance, SEO အတွက် အရေးကြီးတယ်။
+
+---

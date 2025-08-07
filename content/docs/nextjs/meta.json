@@ -1,0 +1,16 @@
+{
+  "title": "Next.js",
+  "pages": [
+    "Next.js Features",
+    "nextjs-pages",
+    "nested-route",
+    "layout-navbar-fonts-metadata",
+    "server-component-vs-client-component",
+    "fetch-data",
+    "nested-layout-dynamic-page",
+    "Image",
+    "more-routing-options",
+    "server-action",
+    "action-files"
+  ]
+}

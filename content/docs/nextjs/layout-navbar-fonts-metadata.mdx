@@ -1,0 +1,108 @@
+---
+title: Layout, NavBar, Fonts, Metadata
+description: 💡 Next.js ဆိုတာဘာလဲ?
+---
+
+### 📄 layout.tsx ဆိုတာဘာလဲ?
+
+layout.tsx ဟာ app structure အတွင်းမှာ အရေးကြီးဆုံးတဲ့ဖိုင်တစ်ခုဖြစ်ပြီး၊
+မည်သည့် page ကိုမဆို ဝင်ရောက်တဲ့အခါမှာ shared layout (ဥပမာ Navbar) တင်ပေးနိုင်ပါတယ်။
+
+❗ဖိုင်အမည်မှာလည်း သတိထားဖို့လိုပါတယ်။ layout.tsx မဟုတ်ဘဲ အခြားနာမည်နဲ့ရေးရင် အလုပ်မလုပ်နိုင်ပါ။
+
+#### ✅ layout.tsx basic setup
+
+```tsx
+import "./globals.css";
+import type { ReactNode } from "react";
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <main className="max-w-3xl mx-auto py-4">
+          {/* Navbar & Page content here */}
+          {children}
+        </main>
+      </body>
+    </html>
+  );
+}
+```
+
+#### 🌐 Layout ထဲမှာ Shared UI ထည့်ခြင်း
+
+Navbar တစ်ခုခုတည်ဆောက်ချင်ရင် ဒီလိုလုပ်ပါမယ်။
+အရင်ဆုံး components folder ကို root directory (app folder အပြင်ဘက်) ထဲမှာဖန်တီးပါ။
+
+```bash
+mkdir components && touch components/Navbar.tsx
+```
+
+#### 🧭 Navbar Component Setup
+
+```tsx
+"use client";
+
+import Link from "next/link";
+
+export default function Navbar() {
+  return (
+    <nav className="max-w-3xl mx-auto py-4 flex gap-4 border-b-2">
+      <Link href="/">Home</Link>
+      <Link href="/counter">Counter</Link>
+      <Link href="/tours">Tours</Link>
+      <Link href="/actions">Actions</Link>
+    </nav>
+  );
+}
+```
+
+#### 🔁 Navbar component ကို layout.tsx ထဲ import လုပ်ပြီး nav tag နေရာမှာသုံးပါ။
+
+```tsx
+import Navbar from '../components/Navbar'
+...
+<body>
+  <Navbar />
+  <main className="max-w-3xl mx-auto py-4">
+    {children}
+  </main>
+</body>
+```
+
+#### ✨ Google Font Setup (Inter, Roboto စတဲ့ font တွေ)
+
+1. Import font from next/font/google
+2. Font instance တစ်ခုဖန်တီးပါ
+3. body tag ထဲမှာ className ဖြင့် အသုံးပြုပါ
+
+```tsx
+import { Inter } from 'next/font/google'
+const inter = Inter({ subsets: ['latin'] })
+...
+<body className={inter.className}>...</body>
+```
+
+#### 📝 Roboto Font အသုံးပြုရင် weight ကိုပါထည့်ဖို့လိုတတ်ပါတယ်။
+
+```tsx
+import { Roboto } from "next/font/google";
+const roboto = Roboto({ subsets: ["latin"], weight: ["400"] });
+```
+
+#### 🧾 Metadata Setup (Head tag ထဲမှာ meta tag တွေထည့်ခြင်း)
+
+```tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My App",
+  description: "Next.js Layout Example",
+  keywords: ["Next.js", "Layout", "Navbar"],
+};
+```
+
+ဒီ metadata တွေဟာ HTML Head tag ထဲမှာ auto inject ဖြစ်မှာ ဖြစ်ပါတယ်။
+
+---

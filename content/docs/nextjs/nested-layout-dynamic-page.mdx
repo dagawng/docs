@@ -1,0 +1,100 @@
+---
+title: Nested Layout And Dynamic Routes
+description: Pages
+---
+
+### 🏗️ Nested Layout သတ်မှတ်ခြင်း
+
+Next.js မှာ Layout ကို Page များအတွင်း common structure အဖြစ်သုံးနိုင်ပါတယ်။
+အဓိက app/layout.tsx (root layout) ကတော့ App တစ်ခုလုံးအတွက် shared layout ဖြစ်ပါတယ်။
+ဒါ့အပြင် အထဲမှာရှိတဲ့ folders (ဥပမာ tours/) တို့အတွက်ပါ ကိုယ်ပိုင် nested layout အသစ်တစ်ခုဖန်တီးနိုင်ပါတယ်။
+
+```ts
+// tours/layout.tsx
+import React, { ReactNode } from "react";
+
+export default function ToursLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="pb-2 bg-slate-500 rounded mb-4">
+      <h1 className="text-3xl text-white text-center">Nested Layout</h1>
+      {children}
+    </div>
+  );
+}
+```
+
+ဒီ layout ဟာ tours/ ထဲမှာရှိတဲ့ Page များအားလုံးအတွက် common layout ဖြစ်လာမှာဖြစ်ပါတယ်။
+
+---
+
+### 🔁 Dynamic Routes ဖန်တီးခြင်း
+
+- တစ်ခုချင်းစီသော ID (သို့) Slug အပေါ်မူတည်ပြီး Route များ dynamically ဖန်တီးနိုင်ပါတယ်။
+- ဥပမာ tours/[id]/page.tsx ဆိုပြီး dynamic route တစ်ခုဖန်တီးနိုင်ပါတယ်။
+
+```tsx
+// tours/[id]/page.tsx
+import React from "react";
+
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default function TourDetail({ params }: Props) {
+  return (
+    <div>
+      <h1 className="text-4xl">ID: {params.id}</h1>
+    </div>
+  );
+}
+```
+
+ဒီ component မှာ params.id ကို URL မှရလာတဲ့ dynamic value အဖြစ်သုံးနိုင်ပါတယ်။ ဥပမာ URL က tours/hello ဆိုရင် params.id က hello ဖြစ်လာပါတယ်။
+
+---
+
+### 🔗 Dynamic Route သို့ Link ချိတ်ခြင်း
+
+- Link component ကိုသုံးပြီး dynamic page များကို navigate လုပ်နိုင်ပါတယ်။
+
+```tsx
+// tours/page.tsx
+import Link from "next/link";
+
+const tours = [
+  { id: "1", name: "Tour 1" },
+  { id: "2", name: "Tour 2" },
+];
+
+export default function ToursPage() {
+  return (
+    <div>
+      {tours.map((tour) => (
+        <Link
+          key={tour.id}
+          href={`/tours/${tour.id}`}
+          className="hover:text-blue-500"
+        >
+          <h2>{tour.name}</h2>
+        </Link>
+      ))}
+    </div>
+  );
+}
+```
+
+ဒီနည်းလမ်းနဲ့ Tours Listing page မှ tour တစ်ခုချင်းစီကို dynamic route အသုံးပြုပြီး link ချိတ်နိုင်ပါတယ်။
+
+---
+
+### ✅ အနှစ်ချုပ်
+
+- tours/layout.tsx မှာ nested layout တစ်ခုသတ်မှတ်ပြီး tours ထဲမှာရှိတဲ့ page များအတွက် shared UI တစ်ခုသတ်မှတ်လိုက်ပါတယ်။
+- tours/[id]/page.tsx ကတော့ dynamic route ဖြစ်ပြီး URL မှ ID value ကို access လုပ်နိုင်ပါတယ်။
+- Link component သုံးပြီး tours list မှ dynamic pages တွင် link ချိတ်နိုင်ပါတယ်။
+
+ဒါကြောင့် Next.js မှာ Route Structure အားခိုင်မာစွာ ဖန်တီးနိုင်သလို Dynamic နဲ့ Nested Layout တွေကို အလွယ်တကူ handle လုပ်နိုင်ပါတယ်။ 🚀
+
+---

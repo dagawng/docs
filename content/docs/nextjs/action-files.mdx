@@ -1,0 +1,123 @@
+---
+title: Server Actions ကို Client Component နှင့် Utility ဖိုင်သို့ ခွဲသိမ်းခြင်း
+---
+
+### 1. Form Component ကို Client Component သို့ပြောင်းခြင်း
+
+Form Component တွင် အပို feature များထည့်မည်ဖြစ်သောကြောင့် use client ကိုထည့်ပြီး Client Component အဖြစ်ပြောင်းရန်လိုအပ်သည်။
+
+```tsx
+"use client";
+
+import { createUserAction } from "@/utils/actions";
+
+export default function Form() {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    await createUserAction(formData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input name="firstName" placeholder="First Name" />
+      <input name="lastName" placeholder="Last Name" />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+---
+
+### 2. Server Action ကို utils/actions.ts သို့ခွဲခြားသိမ်းဆည်းခြင်း
+
+ဖိုင်ဖွဲ့စည်းမှု
+
+```tsx
+/src
+/utils
+actions.ts
+```
+
+```tsx
+"use server";
+
+import { writeFile, readFile } from "fs/promises";
+
+export type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+};
+
+const USERS_PATH = "users.json";
+
+export async function fetchUsers(): Promise<User[]> {
+  const result = await readFile(USERS_PATH, "utf-8");
+  const users = result ? JSON.parse(result) : [];
+  return users;
+}
+
+async function saveUser(user: User) {
+  const users = await fetchUsers();
+  users.push(user);
+  await writeFile(USERS_PATH, JSON.stringify(users));
+}
+
+export async function createUserAction(formData: FormData) {
+  const firstName = formData.get("firstName") as string;
+  const lastName = formData.get("lastName") as string;
+  const newUser: User = {
+    id: Date.now().toString(),
+    firstName,
+    lastName,
+  };
+  await saveUser(newUser);
+}
+```
+
+---
+
+### 3. Form Data ကို တစ်ကြောင်းတည်းဖြင့် ပြောင်းခြင်း (Optional)
+
+Form input များအများကြီးရှိတဲ့အခါ အသုံးဝင်သည်။
+
+```tsx
+const rawData = Object.fromEntries(formData.entries());
+```
+
+ဥပမာ: `{ firstName: 'Anna', lastName: 'Smith' }`
+
+---
+
+### 4. users.json ဖိုင်သိမ်းရန် ဖန်တီးခြင်း
+
+Project root directory တွင် users.json ဖိုင်အသစ်တစ်ခုဖန်တီးပါ။
+
+```tsx
+/users.json
+```
+
+ဖိုင်အတွင်းမှာ အလွတ်ဖြစ်နေသင့်ပါတယ်။ (အစပိုင်းမှာ)
+
+---
+
+### 5. Backend Logic မှတဆင့် Data သိမ်းခြင်း
+
+React component မှတဆင့် users.json ထဲသို့ data သိမ်းရန် logic တစ်ခုရရှိသွားပါပြီ။ ယခုနည်းလမ်းသည် local development အတွက်သာဖြစ်သည်။ Production server (e.g. Vercel) မှာ မအလုပ်လုပ်နိုင်ပါ။
+
+---
+
+### 6. Console မှာ Output ကြည့်ရန်
+
+Form မှာတန်ဖိုးဖြည့်ပြီး Submit လုပ်သည့်အခါ users.json ထဲတွင်တန်ဖိုးများ သိမ်းထားမည်ဖြစ်ပြီး Console တွင်လည်း တန်ဖိုးများကို ကြည့်နိုင်ပါသည်။
+
+```tsx
+console.log(rawData);
+console.log({ firstName, lastName });
+```
+
+---
+
+ဒီနည်းလမ်းဖြင့် React မှာ အလွယ်တကူ backend logic တွေကို တိုက်ရိုက်ထည့်နိုင်သဖြင့် အချို့သောလုပ်ဆောင်ချက်များကို အလွယ်တကူ ဖန်တီးနိုင်ပါတယ်။ နောက်ထပ်နေရာတွင်တော့ Zod ကဲ့သို့သော validation library များဖြင့် Data validation လုပ်ဆောင်ရန် လိုအပ်ပါသည်။

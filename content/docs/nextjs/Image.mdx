@@ -1,0 +1,147 @@
+---
+title: Image Component
+description: The Next.js Image component extends the HTML <img> element for automatic image optimization.
+---
+
+import Image from "next/image";
+
+### Local Image with `next/image` (Local Image ကိုသုံးခြင်း)
+
+```tsx
+import mapsImg from "@/images/maps.jpeg";
+
+export default function LocalImage() {
+  return (
+    <div className="flex gap-x-4 mt-4">
+      {/* Local Image */}
+      <div>
+        <Image
+          src={mapsImg}
+          alt="maps"
+          width={192}
+          height={192}
+          className="w-48 h-48 object-cover rounded"
+          priority
+        />
+        <h2>Local Image</h2>
+      </div>
+    </div>
+  );
+}
+```
+
+#### မှတ်ချက်များ:
+
+- File အရွယ်အစားကြီးများကို မသုံးပါနှင့်။ 3.8MB လောက်ရှိတဲ့ ပုံတွေက Website အတွက် မကောင်းပါ။
+- `width`, `height`, `priority` တို့ကို သတ်မှတ်ခြင်းက Layout shift ကိုကာကွယ်ပြီး Performance ကို တိုးတက်စေပါတယ်။
+
+---
+
+### Remote Image with `next/image` (အွန်လိုင်းမှ ပုံများ သုံးခြင်း)
+
+#### အဆင့် (၁) `next.config.mjs` ထဲတွင် Remote Patterns ထည့်ခြင်း
+
+```js
+// next.config.mjs
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "yourdomain.com",
+        port: "",
+        pathname: "/images/**",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+```
+
+#### အဆင့် (၂) Remote Image ကိုပြသခြင်း
+
+```tsx
+const remoteUrl = "https://yourdomain.com/images/tours/image.jpg";
+
+export default function RemoteImage() {
+  return (
+    <div className="flex gap-x-4 mt-4">
+      {/* Remote Image */}
+      <div>
+        <Image
+          src={remoteUrl}
+          alt="tour"
+          width={192}
+          height={192}
+          className="w-48 h-48 object-cover rounded"
+          priority
+        />
+        <h2>Remote Image</h2>
+      </div>
+    </div>
+  );
+}
+```
+
+#### မှတ်ချက်များ:
+
+- **Remote image** များအတွက် `width`, `height` ကို **လိုအပ်ပါတယ်**။
+- `next.config.mjs` ထဲမှာ သုံးမယ့် domain name ကို ထည့်ဖို့ မမေ့ပါနဲ့။
+
+---
+
+### Responsive Images with `fill` and `sizes`
+
+#### Responsive Layout တစ်ခုအတွက် Grid + Image
+
+```tsx
+export default function TourCard({ tour }) {
+  return (
+    <div className="relative h-48 mb-2">
+      <Image
+        src={tour.image}
+        alt={tour.name}
+        fill
+        priority
+        sizes="
+          (max-width: 768px) 100vw,
+          (max-width: 1200px) 50vw,
+          33vw
+        "
+        className="object-cover rounded"
+      />
+    </div>
+  );
+}
+```
+
+#### Grid Wrapper
+
+```tsx
+<div className="grid md:grid-cols-2 gap-8">
+  {data.map((tour) => (
+    <TourCard key={tour.id} tour={tour} />
+  ))}
+</div>
+```
+
+#### မှတ်ချက်များ:
+
+- Responsive layout အတွက် `fill` ကိုသုံးပါ။
+- Parent ကို `relative` ထားပြီး height ကို သတ်မှတ်ပါ။
+- `sizes` က Screen Size ပေါ်မူတည်ပြီး အထွေထွေ image resolution ကို ထိန်းပေးပါတယ်။
+- Layout shift နဲ့ bandwidth ပြဿနာကို လျော့ချပေးနိုင်ပါတယ်။
+
+---
+
+### အနှစ်ချုပ်
+
+- **Local image** များမှာ `width`/`height` မသတ်မှတ်လည်းရပေမယ့် သတ်မှတ်ထားတာက ပိုကောင်းပါတယ်။
+- **Remote image** များအတွက် domain whitelist ထဲသို့ ထည့်ရန်လိုသည်။
+- **Responsive image** များအတွက်:
+  - `fill` prop
+  - `relative` parent + fixed height
+  - `sizes` prop ကိုသုံးပြီး optimize ပြုလုပ်ရန်လိုသည်။
+
+---

@@ -1,0 +1,126 @@
+---
+title: Nested Routes
+description: Pages
+---
+
+### 🧭 Nested Routes တည်ဆောက်ခြင်း (Next.js)
+
+- /contact တို့လို route များကို root မှမထားချင်ဘဲ /info/contact အနေနဲ့ nested လုပ်ချင်တဲ့အခါတွင် Next.js App Router မှာ ဖော်ပြပါအတိုင်းလုပ်ဆောင်နိုင်ပါတယ်။
+
+#### 📁 Folder Structure
+
+```tsx
+app/
+├── info/
+│ ├── page.tsx # Info page
+│ └── contact/
+│ └── page.tsx # Nested route: /info/contact
+```
+
+- 🏗️ တည်ဆောက်ရန်: 1. info ဆိုတဲ့ folder ကို app/ အောက်မှာဖန်တီးပါ။ 2. info folder ထဲမှာ page.tsx ဖိုင်တစ်ခုရှိရပါမယ်။ မရှိဘူးဆိုရင် /info မှာ 404 ပြပါလိမ့်မယ်။ 3. info/contact folder ထဲမှာလည်း page.tsx တစ်ခုဖန်တီးပါ။ ဒီနေရာကနေပဲ /info/contact route ကိုဖော်ပြမယ်။
+
+🔁 ဥပမာ Component
+
+```tsx
+// app/info/contact/page.tsx
+import Link from "next/link";
+
+export default function ContactPage() {
+  return (
+    <div>
+      <h1>Contact Page</h1>
+      <Link href="/">Go back Home</Link>
+    </div>
+  );
+}
+```
+
+သတိထားရန်: info/page.tsx မရှိရင် /info/contact ကတော့အလုပ်လုပ်ပေမယ့် /info မှာတော့ 404 ပြပါလိမ့်မယ်။
+
+### 🎨 Next.js မှာ CSS အသုံးပြုခြင်း
+
+Next.js app တစ်ခုမှာ CSS အသုံးပြုဖို့နည်းလမ်း ၂ ခုရှိပါတယ်။
+
+#### 1. Vanilla CSS
+
+- app/globals.css ထဲမှာ တိုက်ရိုက်ရေးနိုင်ပါတယ်။
+
+```css
+/_ app/globals.css _/ body {
+  font-family: sans-serif;
+}
+```
+
+#### 2. Tailwind CSS 🌀 (Industry Standard)
+
+• Tailwind CSS ကို install အချိန်မှာရွေးထားလျှင် setup လုပ်ဖို့မလိုပါ။
+• Tailwind classes များကို JSX ထဲမှာ တိုက်ရိုက်ရေးနိုင်ပါတယ်။
+
+```tsx
+<div className="p-6 max-w-sm mx-auto bg-white">Hello Tailwind</div>
+```
+
+```tsx
+    •	p-6 → padding: 1.5rem
+    •	max-w-sm → Max width
+    •	mx-auto → horizontal center
+    •	bg-white → Background color
+```
+
+### 🎨 Color System
+
+Tailwind မှာ predefined color system ပါဝင်တယ်။
+
+- ဥပမာ:
+
+```css
+bg-blue-500 // မဲသောအပြာ
+bg-blue-100 // ပါးသောအပြာ
+```
+
+#### 📏 Spacing (Padding & Margin)
+
+```tsx
+p-1 = 0.25rem
+p-2 = 0.5rem
+p-4 = 1rem
+px-4 = left & right padding
+py-2 = top & bottom padding
+```
+
+#### 📐 Width
+
+```tsx
+w-4 = 1rem (16px)
+w-96 = 24rem (384px)
+w-full = 100%
+```
+
+#### Hover Effects
+
+```css
+hover: bg-sky-500;
+```
+
+#### 📱 Responsive Design
+
+```css
+w-16 md:w-32
+// Small screen: width 16
+// Medium screen (768px+): width 32
+```
+
+#### 📦 Flexbox & Grid
+
+```css
+flex
+flex-col
+items-center
+justify-between
+grid
+grid-cols-3
+```
+
+ဒီအထိ Tailwind CSS ရဲ့ အဓိက concept တွေကိုဖော်ပြပြီးဖြစ်ပါတယ်။ Project တစ်ခုစတင်လုပ်တဲ့အခါမှာ ဤ class များသုံးဖွယ်ရှိတာမို့ လေ့လာဖို့အရေးကြီးပါတယ်။
+
+---

@@ -1,0 +1,107 @@
+---
+title: Server Action
+description: Pages
+---
+
+### 🧠 Overview
+
+Server Actions သည် Next.js 14 မှာ အသစ်ထပ်မံထည့်သွင်းလာသော အရေးကြီးဆုံး feature များထဲမှ တစ်ခုဖြစ်ပြီး
+၊ Component ထဲကနေ တိုက်ရိုက် Server ကိုပြုပြင်နိုင်စေသော feature ဖြစ်ပါတယ်။
+ဒါကြောင့် ကိုယ်ပိုင် API server တည်ဆောက်စရာမလိုတော့ပဲ Backend logic တွေကို Component မှာတိုက်ရိုက်ရေးနိုင်ပါတယ်။
+
+```tsx
+"use server";
+```
+
+မှတ်ချက် – ဒီ server actions တွေဟာ SSR (Server-side Rendering) တွေနဲ့မတူပါဘူး။
+Form action အနေနဲ့သုံးတဲ့အခါမှာ browser ကနေ တိုက်ရိုက် server function ကို call လုပ်နိုင်ပါတယ်။
+
+---
+
+#### ✅ Server Component မှာ Server Action သုံးနည်း
+
+```tsx
+"use server";
+
+async function createUser(formData: FormData) {
+  const firstName = formData.get("firstName");
+  const lastName = formData.get("lastName");
+  console.log("Creating:", firstName, lastName);
+}
+
+<form action={createUser}>
+  <input type="text" name="firstName" defaultValue="John" required />
+  <input type="text" name="lastName" defaultValue="Smith" required />
+  <button type="submit">Submit</button>
+</form>;
+```
+
+- use server ကို function ထဲမှာရေးရပါမယ်။
+- Form input တွေမှာ name attribute မရှိရင် FormData API ကတဆင့် သိမ်းလို့မရပါ။
+
+---
+
+#### 🚀 Client Component မှာ Server Action သုံးနည်း
+
+- Client Component မှာတော့ server action ကို action.ts ဆိုတဲ့ file တစ်ခုမှာရေးထားပြီး import လုပ်ရပါမယ်။
+- Server-side file မှာ use server ကို top-level မှာရေးထားရပါမယ်။
+
+```tsx
+// actions.ts
+"use server";
+
+export async function createUser(formData: FormData) {
+  const firstName = formData.get("firstName");
+  const lastName = formData.get("lastName");
+  console.log("Creating from client:", firstName, lastName);
+}
+
+// FormClient.tsx (client component)
+("use client");
+
+import { createUser } from "../actions";
+
+export function FormClient() {
+  return (
+    <form action={createUser}>
+      <input type="text" name="firstName" defaultValue="John" required />
+      <input type="text" name="lastName" defaultValue="Smith" required />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+---
+
+#### 💡 Server Action အတွက် Form UI Setup
+
+```tsx
+const formStyle = "max-w-md flex flex-col gap-y-4 shadow-md rounded p-4"
+const inputStyle = "border shadow-sm rounded px-3 py-2 text-gray-700"
+const btnStyle = "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded capitalize"
+
+<form action={createUser} className={formStyle}>
+  <h2 className="capitalize mb-4">Create User</h2>
+  <input name="firstName" defaultValue="John" required className={inputStyle} />
+  <input name="lastName" defaultValue="Smith" required className={inputStyle} />
+  <button type="submit" className={btnStyle}>
+    Submit
+  </button>
+</form>
+```
+
+---
+
+#### 🧪 Dev Note
+
+- Form မှာတင်ပြီး submit လုပ်တာနဲ့ Server Terminal ထဲမှာ console.log() ပြသမှာဖြစ်ပါတယ်။
+- နောက်ထပ် တခြား logic တွေ (database, cache revalidation, redirect, etc.) ကိုလည်း ဒီ function ထဲမှာရေးနိုင်ပါတယ်။
+
+---
+
+#### ⛔ Production Deployment အတွက် သတိပြုရန်
+
+Local JSON ထဲမှာ user list များ သိမ်းဖို့ design လုပ်ထားပါတယ်။ ဒါကြောင့် Vercel (or any cloud) မှာ push လုပ်လိုက်တဲ့အခါမှာ အလုပ်မလုပ်နိုင်ပါ။
+
+ဒီ tutorial ဟာ Local Testing အတွက်သာဖြစ်ပါတယ်။
