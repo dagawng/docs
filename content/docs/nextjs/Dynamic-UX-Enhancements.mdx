@@ -1,0 +1,219 @@
+---
+title: "Next.js Server Actions (Dynamic UX Enhancements)"
+description: "React client components အသုံးပြုပြီး UX တိုးတက်အောင်ပြုလုပ်ခြင်း "
+---
+
+## ✅ UX ကို တိုးတက်အောင်ပြုလုပ်ဖို့
+
+Form ထဲမှာ submit လုပ်တဲ့အချိန်မှာ -
+
+1. Button ကို pending state ဖြစ်အောင်ပြောင်းပြသချင်တယ်။
+2. Submit ဖြစ်ပြီးတာနဲ့ Success/Error message ပြချင်တယ်။
+
+ဒါကြောင့် Client Component (React Component) ပြောင်းဖို့လိုပါတယ်။
+
+---
+
+## 🔁 `useFormStatus` Hook သုံးပြီး Pending State ပြရန်
+
+### ✅ Step-by-Step:
+
+1. `SubmitButton` Component အသစ်တစ်ခုဖန်တီးပါ။
+2. `useFormStatus` ကိုအတွင်းမှာသုံးပါ။
+3. `pending` value ကို destructure လုပ်ပြီး button ကို disabled လုပ်ပါ။
+
+```tsx
+"use client";
+import { useFormStatus } from "react-dom";
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button type="submit" disabled={pending} className="btn">
+      {pending ? "Submitting..." : "Submit"}
+    </button>
+  );
+}
+```
+
+4. Form ထဲမှာ `<SubmitButton />` ကို render လုပ်ပါ။
+
+---
+
+## ⚙️ Delay ထည့်ခြင်း (Testing UI)
+
+Server Action ထဲမှာ `await new Promise(resolve => setTimeout(resolve, 3000));` ကိုထည့်ပြီး delay လုပ်လို့ရပါတယ်။
+
+---
+
+## 🚫 `redirect()` မသုံးတော့ဘဲ `revalidatePath()` သုံးခြင်း
+
+```tsx
+import { revalidatePath } from "next/cache";
+
+try {
+  await saveUser(data);
+  revalidatePath("/actions");
+  return "User created successfully";
+} catch (error) {
+  return "Failed to create user";
+}
+```
+
+---
+
+## ✅ `useFormState` သုံးပြီး Message ပြရန်
+
+### Step-by-step
+
+1. Form ထဲမှာ `useFormState(createUser, null)` သုံးပါ။
+
+```tsx
+const [message, formAction] = useFormState(createUser, null);
+```
+
+2. `formAction` ကို `<form action={formAction}>` အဖြစ်သုံးပါ။
+3. `createUser` function ထဲမှာ return value ပြန်ပေးပါ။
+
+```tsx
+export async function createUser(prevState: any, formData: FormData) {
+  try {
+    // logic to save user
+    await revalidatePath("/actions");
+    return "User created successfully";
+  } catch (err) {
+    return "Failed to create user";
+  }
+}
+```
+
+4. UI မှာ `message` ကိုပြပါ။
+
+```tsx
+{
+  message && <p>{message}</p>;
+}
+```
+
+---
+
+## ❗ Structure ကို ဂရုပြုပါ
+
+- Initial state = `null` ဖြစ်လျှင် return value တွေက string ဖြစ်ဖို့လိုတယ်။
+- Initial state = `{ message: '' }` ဖြစ်လျှင် return value တွေလည်း object format ဖြစ်ဖို့လိုတယ်။
+
+---
+
+## ✅ အကျဉ်းချုပ် (Summary)
+
+- UX တိုးတက်အောင် React Client Component အသုံးပြုပါ။
+- SubmitButton ကို `useFormStatus()` နဲ့ pending state ပြပါ။
+- `useFormState()` သုံးပြီး Success/Error message ပြပါ။
+- `redirect()` မသုံးတော့ပဲ `revalidatePath()` သုံးခြင်းကပိုသင့်တော်တယ်။
+
+---
+
+## 🗑️ Delete Button Component တည်ဆောက်ခြင်း
+
+- Delete functionality ဖြင့် server actions မှာ data binding နှစ်မျိုး အသုံးပြုနည်း
+
+### `deletebutton.tsx`
+
+```tsx
+import { deleteUser, removeUser } from "./actions";
+
+type Props = { id: string };
+
+export function DeleteButton({ id }: Props) {
+  // Option 1: Using form input (visible in HTML)
+  // return (
+  //   <form action={deleteUser}>
+  //     <input type="hidden" name="id" value={id} />
+  //     <button type="submit" className="bg-red-500 text-white text-xs rounded p-2">
+  //       Delete
+  //     </button>
+  //   </form>
+  // );
+
+  // Option 2: Using bind (ID hidden from HTML)
+  const removeUserWithId = removeUser.bind(null, id);
+  return (
+    <form action={removeUserWithId}>
+      <input type="hidden" name="name" value="shake and bake" />
+      <button
+        type="submit"
+        className="bg-red-500 text-white text-xs rounded p-2"
+      >
+        Delete
+      </button>
+    </form>
+  );
+}
+```
+
+---
+
+### 🧱 Users List မှာ Delete Button ထည့်ခြင်း
+
+```tsx
+<article key={user.id}>
+  <h4 className="flex justify-between items-center mb-2">
+    {user.name} <DeleteButton id={user.id} />
+  </h4>
+</article>
+```
+
+---
+
+### ⚙️ Server Action (Option 1: input type=“hidden”)
+
+```ts
+export async function deleteUser(formData: FormData) {
+  const id = formData.get("id") as string;
+  const users = await getUsers();
+  const updatedUsers = users.filter((user) => user.id !== id);
+  await saveUsers(updatedUsers);
+  revalidatePath("/actions");
+}
+```
+
+---
+
+❗ Note:
+
+- User ID သည် HTML ထဲမှာ တိုက်ရိုက်ဖော်ပြလိမ့်မည်။
+- Security-sensitive ဖြစ်နိုင်သော use case များတွင် မသင့်တော်ပါ။
+
+---
+
+### ⚙️ Server Action (Option 2: bind method)
+
+```ts
+export async function removeUser(id: string, formData: FormData) {
+  const name = formData.get("name") as string;
+  console.log(name); // should log "shake and bake"
+
+  const users = await getUsers();
+  const updatedUsers = users.filter((user) => user.id !== id);
+  await saveUsers(updatedUsers);
+  revalidatePath("/actions");
+}
+```
+
+#### ✅ Advantage:
+
+• User ID သည် HTML ထဲမှာမပါဝင်ပါ။
+• Bind method သုံးခြင်းဖြင့် more secure (for front-end exposure)
+
+---
+
+### 🧠 Summary (နိဂုံးချုပ်)
+
+- ✅ deleteUser() = input hidden field ဖြင့် value ပေးခြင်း
+
+- ✅ removeUser() = bind method ဖြင့် server action သို့ data ပေးခြင်း
+
+- ❗ Bind method သည် value များကို HTML မှာဖော်ပြစရာမလိုတော့သဖြင့် ပိုမိုလုံခြုံသည်
+
+---

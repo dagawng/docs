@@ -1,0 +1,200 @@
+---
+title: Next.js Route Handlers
+description: Next.js Route Handlers ကို Thunder Client နှင့်အတူ အသုံးပြုပုံကို သင်ကြားပေးထားသော Tutorial ဖြစ်ပါတယ်။
+---
+
+## 🛣️ Next.js မှာ Route Handlers သုံးခြင်း
+
+**Server Actions** က လာခဲ့တဲ့အချိန်မှာ route handlers ကိုသုံးစရာလိုတာ နည်းသွားပါတယ်။  
+ဒါကြောင့်ပဲ ကျွန်တော်တို့ ဒီ tutorial မှာ server actions ကိုပထမဦးစွာသင်ကြားခဲ့တာ ဖြစ်ပါတယ်။
+
+---
+
+## 🤔 Route Handlers မရှိဘဲ ဘာဖြစ်မလဲ?
+
+Server Actions မရှိဘဲ၊ တခြားပုံမှန်လုပ်ဆောင်ချင်တဲ့အခါမှာ client ကနေတင်တန်းလုပ်လို့မရပါဘူး။  
+အဲ့ဒါကြောင့် Server Logic တွေထည့်ဖို့အတွက် **endpoint** တစ်ခုလိုပါတယ်။  
+ပုံမှန်ကတော့ form တစ်ခု client မှာတည်ဆောက်ပြီး၊ form ကို submit လုပ်လိုက်တဲ့အခါမှာ  
+data ကို backend endpoint တစ်ခုဆီသို့ request ပေးပို့တာဖြစ်ပါတယ်။
+
+---
+
+## ⚡ Route Handlers ရဲ့အကျိုးရှိစွမ်း
+
+Route Handlers က သင့် project အတွင်းမှာပဲ Serverless Function တစ်ခုပုံစံနဲ့ လွယ်လွယ်ကူကူ server logic ကို ထည့်နိုင်ပါတယ်။  
+အသစ်စဖွင့်ရတဲ့ server တစ်ခုကိုမလိုတော့ပါဘူး။  
+အဲ့ဒါကြောင့် **လူကြိုက်များလာတာ** ဖြစ်ပါတယ်။
+
+---
+
+## 🔧 Thunder Client အသုံးပြုပုံ
+
+ကျွန်တော် frontend setup ကိုလုပ်မှာမဟုတ်ဘူး။  
+ဒါကြောင့် VS Code Extension ဖြစ်တဲ့ **Thunder Client** ကိုသုံးပြီး  
+request တွေကို VS Code ထဲကတင် test လုပ်ပြမယ်။
+
+- **Install လုပ်ဖို့:** Extension panel မှာ "Thunder Client" ရှာပြီး install လုပ်ပါ။
+
+---
+
+## 📁 Route Handlers Setup လုပ်ခြင်း
+
+1. **app folder** ထဲသို့သွားပါ။
+2. `api` ဆိုတဲ့ folder တစ်ခုဖန်တီးပါ။ (အမည်သည် **အထူးသဖြင့် api ဖြစ်ရမည်**)
+3. `users` ဆိုတဲ့ sub-folder ဖန်တီးပါ။ (route segment)
+4. `route.ts` ဆိုတဲ့ဖိုင် တစ်ခု users folder ထဲမှာဖန်တီးပါ။
+
+---
+
+## 🧠 GET Method သတ်မှတ်ခြင်း
+
+- GET ဆိုတာက HTTP method တစ်ခုဖြစ်ပြီး browser မှာပုံမှန်တောင်းဆိုမှုအမျိုးအစား ဖြစ်ပါတယ်။
+- Response.json() ဆိုတာက JSON format နဲ့ ပြန်ပေးတဲ့ method ဖြစ်ပါတယ်။
+
+```ts
+// app/api/users/route.ts
+import { fetchUsers } from "@/actions";
+
+export async function GET() {
+  const users = await fetchUsers();
+  return Response.json(users);
+}
+```
+
+## 🌐 Browser မှာ Test လုပ်ခြင်း
+
+- Browser မှာအောက်ပါ URL ကိုသွားကြည့်ပါ။
+
+```
+http://localhost:3000/api/users
+```
+
+အဲ့မှာ JSON format နဲ့ user list တန်ပြန်လာမယ်။
+
+## ⚙ Thunder Client အသုံးပြုပြီး Test လုပ်ခြင်း
+
+1. VS Code ထဲမှာ Thunder Client icon ကိုနှိပ်ပါ။
+2. New Request ဖန်တီးပြီး URL ထည့်ပါ — http://localhost:3000/api/users
+3. Method ကို GET ထားပါ။
+4. Send နှိပ်ပြီး JSON data ကို ပြန်တွေ့ရမယ်။
+
+---
+
+## Next.js Request Parameters နှင့် POST Request ကို Thunder Client သုံးပြီး စမ်းသပ်ခြင်း
+
+Route Handler များအတွက် request parameter, NextRequest/NextResponse နှင့် Thunder Client ကို သုံး၍ POST request ကို handle လုပ်နည်း။
+
+## 🧾 Request Parameter နဲ့ Web APIs
+
+### 🧠 Request Parameter ဆိုတာဘာလဲ?
+
+Route Handler ထဲမှာ function တစ်ခုရေးတဲ့အခါ `request` parameter ကို default အနေနဲ့ ရနိုင်ပါတယ်။
+
+```ts
+export async function GET(request: Request) {
+  console.log(request);
+}
+```
+
+Request parameter မှတစ်ဆင့် query string (URL parameter) တွေကိုလည်းရယူနိုင်ပါတယ်။
+
+```tsx
+const { searchParams } = new URL(request.url);
+const id = searchParams.get("id");
+```
+
+Browser မှာ URL ကို `/api/users?id=123` လို့ရေးပြီး တောင်းဆိုကြည့်လို့ရပါတယ်။
+
+---
+
+### 🚀 NextRequest နှင့် NextResponse
+
+#### 🤔 ဘာကြောင့်သုံးရတာလဲ?
+
+Next.js မှာရှိတဲ့ NextRequest နှင့် NextResponse ကတော့ default web API ကို wrap လုပ်ထားတာဖြစ်ပြီး
+features ပိုများလာပါတယ်။
+
+```ts
+import { NextRequest, NextResponse } from "next/server";
+
+export async function GET(request: NextRequest) {
+  const id = request.nextUrl.searchParams.get("id");
+  console.log(id);
+  return NextResponse.json({ id });
+}
+```
+
+### 🔁 Redirect လုပ်ချင်တယ်ဆိုရင်
+
+- NextResponse ကိုသုံးပြီး redirect လုပ်နိုင်ပါတယ်။ Absolute URL တစ်ခုလိုအပ်ပါတယ်။
+
+```ts
+export async function GET(req: NextRequest) {
+  const redirectUrl = new URL("/", req.url);
+  return NextResponse.redirect(redirectUrl);
+}
+```
+
+`"/"` တင်ရေးမယ်ဆိုရင် error ဖြစ်မှာဖြစ်လို့ `new URL("/", req.url)`လို့ရေးရပါတယ်။
+
+### 📬 POST Request ကို Handle လုပ်ခြင်း
+
+- POST request ဆိုတာက Client ကနေ Server ကို data ပေးပို့တဲ့လုပ်ဆောင်ချက်ဖြစ်ပါတယ်။
+- Thunder Client သုံးပြီး စမ်းသပ်နိုင်ပါတယ်။
+
+```ts
+export async function POST(request: Request) {
+  const body = await request.json();
+  console.log(body);
+  return Response.json({ message: "User created" });
+}
+```
+
+### 🛠 Thunder Client နဲ့ စမ်းသပ်ခြင်း
+
+1. Thunder Client VS Code Extension ကို Install လုပ်ပါ။
+2. POST method သုံးပြီး /api/users ကို request ပေးပါ။
+3. Body မှာ JSON format သုံးပါ။
+
+```json
+{
+  "firstName": "Thunder",
+  "lastName": "Client"
+}
+```
+
+### 🏗 အသုံးပြုသူသစ် ဖန်တီးခြင်း (User Creation)
+
+- အောက်က code က POST request ထဲမှာ user အသစ်တစ်ယောက်ဖန်တီးတဲ့နည်းဖြစ်ပါတယ်။
+
+```ts
+import { saveUser } from "@/actions";
+
+export async function POST(request: Request) {
+  const user = await request.json();
+
+  const newUser = {
+    ...user,
+    id: Date.now().toString(),
+  };
+
+  await saveUser(newUser);
+
+  return Response.json({ message: "User created", user: newUser });
+}
+```
+
+✅ explanation
+
+1. Thunder Client နဲ့ POST request ပေးလိုက်တဲ့အခါ
+2. request.json() နဲ့ data ကိုယူပြီး
+3. Date.now() နဲ့ unique ID တစ်ခုဖန်တီးပြီး
+4. saveUser() function ကိုခေါ်သုံးပါတယ်။
+5. ပြန်ပေးတဲ့ response မှာ ဖန်တီးထားတဲ့ user ကိုထည့်ပေးပါတယ်။
+
+### 🔍 ပြန်စစ်ကြည့်ခြင်း
+
+- Browser မှာ /api/users ကို GET request ပေးကြည့်ပြီး user အသစ်ပါလာတဲ့အကြောင်းအရာကို ပြန်ကြည့်နိုင်ပါတယ်။
+- Thunder Client ထဲကလည်း response JSON တွေပြန်ရပါမယ်။
+
+---

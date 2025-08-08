@@ -1,0 +1,103 @@
+---
+title: "Next.js Cache Revalidation Tutorial"
+description: "UsersList ကို cache များနဲ့ ပြဿနာမရှိအောင်ပြန်ဖော်ပြနိုင်ဖို့နည်းလမ်းများ။"
+---
+
+## ✅ အသုံးပြုထားတဲ့ နောက်ခံအကြောင်း
+
+Form မှတဆင့် အသုံးပြုသူသစ်တစ်ယောက်ကို `users.json` ဖိုင်ထဲသို့ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါက `UsersList` သို့ပြန်သွားပြီး အသုံးပြုသူစာရင်းကို ပြသဖို့လိုအပ်ပါတယ်။
+
+---
+
+## 🚀 Step 1: UsersList Component ထဲမှာ Users များဖော်ပြခြင်း
+
+```tsx
+const users = await fetchUsers(); // fetchUsers ကို import လုပ်ထားရမယ်
+```
+
+Async function ဖြစ်စေဖို့ `async` keyword ထည့်ရပါမယ်။
+
+```tsx
+if (users.length === 0) {
+  return <p>No users found...</p>;
+} else {
+  return (
+    <div className="mt-4">
+      {users.map((user) => (
+        <h4 key={user.id} className="capitalize text-lg">
+          {user.firstName} {user.lastName}
+        </h4>
+      ))}
+    </div>
+  );
+}
+```
+
+---
+
+## 🧠 Gotcha: အသုံးပြုသူအသစ် ထည့်ပြီး turndown မဖြစ်တဲ့ပြဿနာ
+
+အသစ်ထည့်ပြီးတာနဲ့ UI မပြောင်းဘူး။ Refresh လုပ်မှသိမ်းဆည်းထားတာ ပြသတယ်။
+
+အကြောင်းအရင်းကတော့ Next.js က aggressive caching ပြုလုပ်တယ်။ သာမန် static pages တွေမှာ cached content ပြန်တင်တယ်။ အဲ့ဒါကြောင့်အသစ်ထည့်တဲ့ data တွေ တိုက်ရိုက်မြင်မရဘူး။
+
+---
+
+## ✅ ဖြေရှင်းနည်း (2 ချက်)
+
+### 1. `revalidatePath()` သုံးခြင်း
+
+```tsx
+import { revalidatePath } from "next/cache";
+
+// createUser function ထဲမှာ အသုံးပြုခြင်း
+await revalidatePath("/actions");
+```
+
+အသုံးပြုပြီးတာနဲ့ cache ပြန်ပြင်တယ်။ UI မှာအသစ်ထည့်တဲ့ user ကိုပြတယ်။
+
+### 2. `redirect()` သုံးခြင်း
+
+```tsx
+import { redirect } from "next/navigation";
+
+// createUser function ထဲမှာ အသုံးပြုခြင်း
+redirect("/");
+```
+
+Form မှာ submit ဖြစ်ပြီးတာနဲ့ homepage ကိုပြန်လည်ပြောင်းသွားတယ်။ ထပ်မံပြသချင်တဲ့နေရာကို redirect လုပ်လို့ရတယ်။
+
+---
+
+## ❗ Redirect ကို try block ထဲမှာမထားရ
+
+```tsx
+try {
+  await createUser(data);
+  redirect("/"); // ❌ ဒီလိုရိုက်မထားပါနဲ့
+} catch (err) {
+  console.error(err);
+}
+```
+
+ဒီလိုရေးမယ်ဆိုရင် redirect လုပ်တာနဲ့အတူ error တက်လာတတ်တယ်။ အမှန်က redirect ကို try block အပြင်ဘက်မှာထားရမယ်။
+
+```tsx
+try {
+  await createUser(data);
+} catch (err) {
+  console.error(err);
+}
+
+redirect("/"); // ✅ ဒီမှာထားရမယ်
+```
+
+---
+
+## ✅ အကျဉ်းချုပ် (Summary)
+
+- Users list ကိုဖော်ပြဖို့ async function တွင် fetchUsers ကိုသုံးပါ။
+- Cache ပြဿနာရှိရင် `revalidatePath()` သို့မဟုတ် `redirect()` သုံးနိုင်တယ်။
+- Redirect ကို try block အတွင်းမထားရဘူး။
+
+---

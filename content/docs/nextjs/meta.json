@@ -11,6 +11,10 @@
     "Image",
     "more-routing-options",
     "server-action",
-    "action-files"
+    "action-files",
+    "Cache-Revalidation",
+    "Dynamic-UX-Enhancements",
+    "route-handler",
+    "middleware"
   ]
 }

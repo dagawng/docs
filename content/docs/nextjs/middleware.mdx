@@ -1,0 +1,103 @@
+---
+title: Next.js Middleware
+---
+
+---
+
+## **Middleware ဆိုတာဘာလဲ?**
+
+**Middleware** သည် request တစ်ခုကို ပြီးဆုံးရန် မတိုင်မီ logic များကို run လုပ်နိုင်စေသည်။  
+သင် Third-party packages (သို့) services တစ်ခုခုကို အသုံးပြုမယ်ဆိုရင်၊ Middleware မှာ logic များပါဝင်နိုင်ပြီး အခု tutorial မှာ concept များကို ရှင်းပြသွားမှာဖြစ်ပါတယ်။
+
+---
+
+## **`middleware.ts` ဖိုင်ဖန်တီးခြင်း**
+
+- **နေရာ:** Project Root
+- **ဖိုင်အမည်:** `middleware.ts` (အတိအကျရေးရန်လိုသည်)
+- **Extension:** `.ts` (TypeScript အသုံးပြုမည်)
+
+```ts
+export function middleware(request: NextRequest) {
+  console.log("Hello there");
+}
+```
+
+အထက်ဖော်ပြပါ function သည် request တစ်ခုစီအတွက် run လုပ်မည်ဖြစ်သည်။ Project ထဲတွင် navigation လုပ်ကြည့်ပါက console တွင် hello there မြင်ရပါမည်။
+
+## Route တစ်ခုအထူးပြု၍ Middleware အသုံးပြုခြင်း
+
+- matcher ကို အသုံးပြု၍ route တစ်ခုအတွက်သာ Middleware run ချင်လျှင်:
+
+```ts
+export const config = {
+  matcher: ["/about"],
+};
+```
+
+သတိပြုရန်:
+
+- ဤနည်းလမ်းသည် /about route ကိုသာ run လုပ်မည်ဖြစ်ပြီး၊ nested routes များ (ဥပမာ /about/info) ကို မဖော်ပြပါ။
+
+## JSON Response ပြန်ပေးခြင်း
+
+```ts
+import { NextResponse } from "next/server";
+
+export function middleware() {
+  return NextResponse.json({ message: "Hello there" });
+}
+```
+
+- /about ကို ဝင်ကြည့်ပါက JSON message ဖြစ်တဲ့ "Hello there" ပြန်ပေးသွားမည်။
+
+## Authentication Redirect လုပ်ခြင်း (အရမ်းရိုးရှင်း)
+
+```ts
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export const config = {
+  matcher: ["/about/:path*", "/tours/:path*"],
+};
+
+export function middleware(request: NextRequest) {
+  console.log("Hello there");
+  return NextResponse.redirect(new URL("/", request.url));
+}
+```
+
+- /about, /tours နှင့် ၎င်းတို့၏ children routes များကို homepage သို့ redirect လုပ်ပါမည်။
+- Console တွင် hello there ကိုလည်း မြင်ရပါမည်။
+
+## Production Build ပြုလုပ်ခြင်း
+
+#### cleanup လုပ်ခြင်း
+
+1. middleware.ts ကို ဖျက်ပါ။
+2. Users list CSS များကိုပြင်ပါ – Users container div ထဲတွင် Tailwind class w-full သို့မဟုတ် အခြားအသုံးဝင် class များထည့်ပါ။
+3. Users Data များကို ဖျက်လိုပါက မူရင်း json ထဲမှ ဖျက်ပါ။
+
+### Production Build မည်သို့ run လုပ်မလဲ?
+
+```bash
+npm run build
+npm start
+```
+
+- npm run dev မဟုတ်ပဲ npm start ကို အသုံးပြုရမည်။
+- localhost:3000 တွင် production-ready version ကို ဝင်ကြည့်နိုင်သည်။
+
+## Caching ကို နားလည်ပါစေ
+
+Production build မှာ Pages တချို့ကို pre-render လုပ်ထားသဖြင့် loading များကို မမြင်ရတော့ပါ။
+
+- Static pages များကို Build များအတွင်း စီစဉ်ထားပြီး၊ user request များကို Server ထံမှ တုံ့ပြန်မှုမလိုဘဲ တင်ပြနိုင်သည်။
+- Dynamic pages များ (Lambda symbols ဖြင့် ပြထားသော) ကိုတော့ request အချိန်မှာ server မှ generate လုပ်ပါသည်။
+
+## Caching Test (သက်သေပြခြင်း)
+
+1. fetchTours function ထဲတွင် console.log("Fetching Tours...") ထည့်ပါ။
+2. npm run build ပြုလုပ်ပါ။
+3. Console ထဲတွင် Fetch message ပြသည်ဆိုပါက Static ဖြစ်သည်။
+4. npm start ဖြင့် စစ်ကြည့်ပါ။ Fetch log မပြပါက caching ဖြစ်နေခြင်းဖြစ်သည်။
