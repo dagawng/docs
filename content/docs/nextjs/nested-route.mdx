@@ -4,7 +4,7 @@ title: Nested Routes
 
 ### 🧭 Nested Routes တည်ဆောက်ခြင်း (Next.js)
 
-- /contact တို့လို route များကို root မှမထားချင်ဘဲ /info/contact အနေနဲ့ nested လုပ်ချင်တဲ့အခါတွင် Next.js App Router မှာ ဖော်ပြပါအတိုင်းလုပ်ဆောင်နိုင်ပါတယ်။
+- `/contact` တို့လို route များကို root မှမထားချင်ဘဲ `/info/contact` အနေနဲ့ nested လုပ်ချင်တဲ့အခါတွင် `Next.js App Router` မှာ ဖော်ပြပါအတိုင်းလုပ်ဆောင်နိုင်ပါတယ်။
 
 #### 📁 Folder Structure
 
@@ -16,7 +16,11 @@ app/
 │ └── page.tsx # Nested route: /info/contact
 ```
 
-- 🏗️ တည်ဆောက်ရန်: 1. info ဆိုတဲ့ folder ကို app/ အောက်မှာဖန်တီးပါ။ 2. info folder ထဲမှာ page.tsx ဖိုင်တစ်ခုရှိရပါမယ်။ မရှိဘူးဆိုရင် /info မှာ 404 ပြပါလိမ့်မယ်။ 3. info/contact folder ထဲမှာလည်း page.tsx တစ်ခုဖန်တီးပါ။ ဒီနေရာကနေပဲ /info/contact route ကိုဖော်ပြမယ်။
+🏗️ တည်ဆောက်ရန်:
+
+1. info ဆိုတဲ့ folder ကို `app/` အောက်မှာဖန်တီးပါ။
+2. info folder ထဲမှာ `page.tsx` ဖိုင်တစ်ခုရှိရပါမယ်။ မရှိဘူးဆိုရင် `/info မှာ 404` ပြပါလိမ့်မယ်။
+3. `info/contact folder` ထဲမှာလည်း `page.tsx` တစ်ခုဖန်တီးပါ။ ဒီနေရာကနေပဲ `/info/contact route` ကိုဖော်ပြမယ်။
 
 🔁 ဥပမာ Component
 
@@ -34,7 +38,7 @@ export default function ContactPage() {
 }
 ```
 
-သတိထားရန်: info/page.tsx မရှိရင် /info/contact ကတော့အလုပ်လုပ်ပေမယ့် /info မှာတော့ 404 ပြပါလိမ့်မယ်။
+သတိထားရန်: `info/page.tsx` မရှိရင် `/info/contact` ကတော့အလုပ်လုပ်ပေမယ့် `/info မှာတော့ 404` ပြပါလိမ့်မယ်။
 
 ### 🎨 Next.js မှာ CSS အသုံးပြုခြင်း
 
@@ -42,7 +46,7 @@ Next.js app တစ်ခုမှာ CSS အသုံးပြုဖို့န
 
 #### 1. Vanilla CSS
 
-- app/globals.css ထဲမှာ တိုက်ရိုက်ရေးနိုင်ပါတယ်။
+- `app/globals.css` ထဲမှာ တိုက်ရိုက်ရေးနိုင်ပါတယ်။
 
 ```css
 /_ app/globals.css _/ body {

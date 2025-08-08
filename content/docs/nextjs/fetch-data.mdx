@@ -10,7 +10,7 @@ URL ရွေးချယ်ရာမှာ ကိုယ်တိုင်သိ
 
 ### ဖိုင်ဖွဲ့စည်းခြင်း
 
-1. app/tours/page.tsx ဆိုတဲ့ဖိုင်အသစ်ဖန်တီးပါ။
+1. `app/tours/page.tsx` ဆိုတဲ့ဖိုင်အသစ်ဖန်တီးပါ။
 2. Component တစ်ခုတည်ဆောက်ပြီး ToursPage လို့နာမည်ပေးပါ။
 3. TypeScript သုံးမယ်ဆိုတော့ tour တစ်ခုမှာ ပါဝင်မယ့် property တွေ (id, name, info, image, price) အတွက် Type တစ်ခု ပြုလုပ်ပေးရပါမယ်။
 
@@ -55,7 +55,7 @@ const data = await fetchTours();
 
 ### Custom Loading Component
 
-Data loading ချိန်မှာ user ကို feedback ပေးဖို့ loading.tsx ဖိုင်ထဲမှာ client component တစ်ခုရေးပါ။
+Data loading ချိန်မှာ user ကို feedback ပေးဖို့ `loading.tsx` ဖိုင်ထဲမှာ client component တစ်ခုရေးပါ။
 
 ```tsx
 "use client";
@@ -65,13 +65,13 @@ export default function Loading() {
 }
 ```
 
-အရေးကြီးတာက loading.tsx လို့အမည်ပေးရပြီး use client directive ကိုထည့်ပေးရပါမယ်။ ဒီ loading component ကို page loading ချိန်မှာ Next.js က auto render လုပ်ပေးမှာဖြစ်ပါတယ်။
+အရေးကြီးတာက `loading.tsx` လို့အမည်ပေးရပြီး use client directive ကိုထည့်ပေးရပါမယ်။ ဒီ loading component ကို page loading ချိန်မှာ Next.js က auto render လုပ်ပေးမှာဖြစ်ပါတယ်။
 
 ---
 
 ### Custom Error Component
 
-API မှာ error ဖြစ်လာရင် ပြသဖို့ error.tsx ဖိုင်ထဲမှာလည်း client component တစ်ခုရေးပါ။
+API မှာ error ဖြစ်လာရင် ပြသဖို့ `error.tsx` ဖိုင်ထဲမှာလည်း client component တစ်ခုရေးပါ။
 
 ```tsx
 "use client";
@@ -99,6 +99,6 @@ export default function Error({ error }: ErrorProps) {
 ### နိဂုံးချုပ်
 
 - Server Component မှာ async function တွေ တိုက်ရိုက်သုံးလို့ရတယ်။
-- Custom loading/error component များရေးဖို့ လိုအပ်တယ်။
+- Custom `loading/error` component များရေးဖို့ လိုအပ်တယ်။
 - TypeScript အသုံးပြုမယ်ဆိုရင် type ကို သေချာသတ်မှတ်ပေးဖို့ လိုတယ်။
 - Data fetching logic ကို component ထဲမထည့်ပဲ ပြင်ပ function တွေဖြစ်အောင် ခွဲထုတ်ခြင်းက code ကို maintain လုပ်ရတာ ပိုလွယ်တယ်။
