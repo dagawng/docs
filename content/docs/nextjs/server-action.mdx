@@ -1,19 +1,16 @@
 ---
 title: Server Action
+description: API Route မလိုဘဲ Form Data ကို Server မှ တိုက်ရိုက် ကိုင်တွယ်နိုင်မည့် Server Actions ကို Next.js မှာ ဘယ်လိုအသုံးပြုမလဲ။
 ---
 
 ### 🧠 Overview
 
-Server Actions သည် Next.js 14 မှာ အသစ်ထပ်မံထည့်သွင်းလာသော အရေးကြီးဆုံး feature များထဲမှ တစ်ခုဖြစ်ပြီး
-၊ Component ထဲကနေ တိုက်ရိုက် Server ကိုပြုပြင်နိုင်စေသော feature ဖြစ်ပါတယ်။
-ဒါကြောင့် ကိုယ်ပိုင် API server တည်ဆောက်စရာမလိုတော့ပဲ Backend logic တွေကို Component မှာတိုက်ရိုက်ရေးနိုင်ပါတယ်။
+**Server Actions** ဆိုတာ `"use server"` ဆိုတဲ့ directive ဖြင့် အမှတ်အသားပြုထားတဲ့ asynchronous functions ဖြစ်ပြီး Form data တင်သွင်းမှု (form submissions) နဲ့ data ပြောင်းလဲမှု (mutations) တွေကို **server မှာသာ** ကိုင်တွယ်နိုင်စေတယ်။  
+အဓိကအားဖြင့် **API Route မလို**တော့ဘဲ လွယ်ကူစွာလုပ်နိုင်တယ်။
 
 ```tsx
 "use server";
 ```
-
-မှတ်ချက် – ဒီ server actions တွေဟာ SSR (Server-side Rendering) တွေနဲ့မတူပါဘူး။
-Form action အနေနဲ့သုံးတဲ့အခါမှာ browser ကနေ တိုက်ရိုက် server function ကို call လုပ်နိုင်ပါတယ်။
 
 ---
 
@@ -35,7 +32,7 @@ async function createUser(formData: FormData) {
 </form>;
 ```
 
-- use server ကို function ထဲမှာရေးရပါမယ်။
+- use server ကို component ရဲ အထိပ်ဆုံး မှာရေးရပါမယ်။
 - Form input တွေမှာ name attribute မရှိရင် FormData API ကတဆင့် သိမ်းလို့မရပါ။
 
 ---
