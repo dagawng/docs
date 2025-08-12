@@ -4,16 +4,17 @@ title: Nested Routes
 
 ### 🧭 Nested Routes တည်ဆောက်ခြင်း (Next.js)
 
-- `/contact` တို့လို route များကို root မှမထားချင်ဘဲ `/info/contact` အနေနဲ့ nested လုပ်ချင်တဲ့အခါတွင် `Next.js App Router` မှာ ဖော်ပြပါအတိုင်းလုပ်ဆောင်နိုင်ပါတယ်။
+- `/contact` တို့လို route များကို root directory မှမထားချင်ဘဲ `/info/contact` အနေနဲ့ nested လုပ်ချင်တဲ့အခါတွင်
+  `Next.js App Router` မှာအောက်ဖော်ပြပါအတိုင်းလုပ်ဆောင်နိုင်ပါတယ်။
 
 #### 📁 Folder Structure
 
 ```tsx
 app/
 ├── info/
-│ ├── page.tsx # Info page
+│ ├── page.tsx //info page: /info
 │ └── contact/
-│ └── page.tsx # Nested route: /info/contact
+│ └── page.tsx //Nested route: /info/contact
 ```
 
 🏗️ တည်ဆောက်ရန်:
@@ -49,7 +50,8 @@ Next.js app တစ်ခုမှာ CSS အသုံးပြုဖို့န
 - `app/globals.css` ထဲမှာ တိုက်ရိုက်ရေးနိုင်ပါတယ်။
 
 ```css
-/_ app/globals.css _/ body {
+/* app/globals.css  */
+body {
   font-family: sans-serif;
 }
 ```
@@ -63,11 +65,12 @@ Next.js app တစ်ခုမှာ CSS အသုံးပြုဖို့န
 <div className="p-6 max-w-sm mx-auto bg-white">Hello Tailwind</div>
 ```
 
-```tsx
-    •	p-6 → padding: 1.5rem
-    •	max-w-sm → Max width
-    •	mx-auto → horizontal center
-    •	bg-white → Background color
+```css
+
+p-6 /* padding: 1.5rem */
+max-w-sm /* Max width */
+mx-auto /* horizontal center */
+bg-white /* Background color */
 ```
 
 ### 🎨 Color System
@@ -77,26 +80,26 @@ Tailwind မှာ predefined color system ပါဝင်တယ်။
 - ဥပမာ:
 
 ```css
-bg-blue-500 // မဲသောအပြာ
-bg-blue-100 // ပါးသောအပြာ
+bg-blue-500 /* မဲသောအပြာ */
+bg-blue-100 /* ပါးသောအပြာ */
 ```
 
 #### 📏 Spacing (Padding & Margin)
 
-```tsx
-p-1 = 0.25rem
-p-2 = 0.5rem
-p-4 = 1rem
-px-4 = left & right padding
-py-2 = top & bottom padding
+```css
+p-1 /*  0.25rem */
+p-2 /* 0.5rem */
+p-4 /*  1rem*/
+px-4 /* left & right padding */
+py-2  /* top & bottom padding */
 ```
 
 #### 📐 Width
 
-```tsx
-w-4 = 1rem (16px)
-w-96 = 24rem (384px)
-w-full = 100%
+```css
+w-4 /* 1rem (16px) */
+w-96 /* 24rem (384px) */
+w-full/* 100% */
 ```
 
 #### Hover Effects
@@ -109,8 +112,8 @@ hover: bg-sky-500;
 
 ```css
 w-16 md:w-32
-// Small screen: width 16
-// Medium screen (768px+): width 32
+/* Small screen: width 16 */
+ /* Medium screen (768px+): width 32 */
 ```
 
 #### 📦 Flexbox & Grid

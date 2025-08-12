@@ -3,8 +3,18 @@ title: Next.js
 description: 💡 Next.js ဆိုတာဘာလဲ?
 ---
 
-- Next.js ဟာ React အခြေခံထားတဲ့ အားသာချက်များပြည့်နက်တဲ့ Framework တစ်ခုပဲဖြစ်ပါတယ်။ React နဲ့ Frontend UI တည်ဆောက်နိုင်သလို၊ Next.js ကို အသုံးပြုပြီးတော့ Backend လည်း တည်ဆောက်နိုင်တာကြောင့် Full-stack application တစ်ခုကို တစ်ခါတည်း ပြုလုပ်နိုင်ပါတယ်။
-- React မှာတော့ Feature တစ်ခုချင်းစီအတွက် သုံးပေါ်သော Third-party Libraries များတပ်ဆင်ဖို့လိုအပ်ပါတယ်။ ဒါပေမယ့် Next.js မှာတော့ အထဲမှာပါဝင်ပြီးသား ဖြစ်တဲ့ Server-side Rendering, Static Generation, API Routes, Optimization Strategies စတာတွေကို လွယ်လွယ်ကူကူနဲ့ သုံးနိုင်ပါတယ်။
+- Next.js က React ကိုအခြေခံထားပြီး website နဲ့ web app တွေကို ပိုလွယ်ကူ၊ပိုမြန်မြန်ဆန်ဆန်တည်ဆောက်နိုင်စေတဲ့ framework တစ်ခုပါ။
+
+- React တင်သုံးတဲ့အခါမှာ feature တချို့ကို ကိုယ်တိုင် setup လုပ်ရသလို third-party library တွေကိုလဲတပ်ထည့်ရပါတယ်။
+- Next.js ကတော့ အဲဒီ feature တွေကို built-in အဖြစ်ပဲပေးထားတာကြောင့် တိုက်ရိုက်အသုံးချနိုင်ပါတယ်။
+
+### Next.js ရဲ့ အဓိကအကျိုးကျေးဇူးများ
+
+- Server-side Rendering (SSR) – ပေါင်းထည့်လိုက်တဲ့ အချက်အလက်ကို server ကနေ တိုက်ရိုက် render လုပ်ပေးတာကြောင့် SEO အတွက်ကောင်းတယ်။
+- Static Site Generation (SSG) – တချို့ page တွေကို အမြဲတမ်း static file အဖြစ် generate လုပ်ထားနိုင်ပြီး loading မြန်တယ်။
+- API Routes – Backend API ကို ထပ်ဆောက်စရာမလိုဘဲ Next.js ထဲမှာပဲ API endpoint တွေ ဖန်တီးနိုင်တယ်။
+- Image Optimization – ပုံတွေကို အလိုအလျောက် resize, lazy load စတာလုပ်ပေးတယ်။
+- Routing system – File/folder အခြေပြုပြီး route များကို အလိုအလျောက်ပြင်ဆင်ပေးတယ်။
 
 ### Next.js ကို ဘယ်လို Setup လုပ်မလဲ?
 
@@ -56,11 +66,9 @@ yarn dev
 pnpm dev
 ```
 
-- ပြီးရင် browser မှာသွားပါ
+- ပြီးရင် browser ကိုသွားပြီး  `http://localhost:3000` url သွားလိုက်ပြီ starter page ကို တွေ့ ရရင် next.js app ရေးဖို စလိုရပါပြီ
 
-```bash
-http://localhost:3000
-```
+
 
 #### 🗂️ App Router အတွက် Example Project Structure
 
